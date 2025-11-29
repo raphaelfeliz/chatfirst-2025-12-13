@@ -171,6 +171,44 @@ const productResultsEl = document.getElementById('product-results');
 const restartBtn = document.getElementById('restart-button');
 const chatMessagesEl = document.getElementById('chat-messages');
 
+// Mobile Tabs Refs
+const tabWizard = document.getElementById('tab-wizard');
+const tabChat = document.getElementById('tab-chat');
+const wizardColumn = document.getElementById('wizard-column');
+const chatSidebar = document.getElementById('chat-sidebar');
+
+// Mobile Tab Logic
+function switchTab(tab) {
+    if (tab === 'wizard') {
+        // Show Wizard, Hide Chat
+        wizardColumn.classList.remove('hidden');
+        chatSidebar.classList.add('hidden');
+
+        // Update Tab Styles
+        tabWizard.classList.add('text-white', 'border-[#36C0F2]');
+        tabWizard.classList.remove('text-gray-400', 'border-transparent');
+
+        tabChat.classList.remove('text-white', 'border-[#36C0F2]');
+        tabChat.classList.add('text-gray-400', 'border-transparent');
+    } else {
+        // Show Chat, Hide Wizard
+        wizardColumn.classList.add('hidden');
+        chatSidebar.classList.remove('hidden');
+
+        // Update Tab Styles
+        tabChat.classList.add('text-white', 'border-[#36C0F2]');
+        tabChat.classList.remove('text-gray-400', 'border-transparent');
+
+        tabWizard.classList.remove('text-white', 'border-[#36C0F2]');
+        tabWizard.classList.add('text-gray-400', 'border-transparent');
+    }
+}
+
+if (tabWizard && tabChat) {
+    tabWizard.addEventListener('click', () => switchTab('wizard'));
+    tabChat.addEventListener('click', () => switchTab('chat'));
+}
+
 function getIconForValue(facet, value) {
     const def = FACET_DEFINITIONS[facet];
     return (def && def.iconMap && def.iconMap[value]) ? def.iconMap[value] : 'fa-check';
@@ -209,8 +247,8 @@ function createOptionCard(facet, value) {
 
 function createProductCard(product) {
     const card = document.createElement('div');
-    // Flex row layout with 3 columns
-    card.className = "flex flex-row w-full h-full rounded-xl overflow-hidden shadow-2xl border border-gray-200 group bg-white p-6 gap-6 items-center";
+    // Flex column on mobile, row on desktop
+    card.className = "flex flex-col md:flex-row w-full h-full rounded-xl overflow-hidden shadow-2xl border border-gray-200 group bg-white p-6 gap-6 items-center";
 
     // Use local image from the images folder
     const bgImage = `images/${product.image}`;
@@ -231,27 +269,27 @@ function createProductCard(product) {
     }).join('');
 
     card.innerHTML = `
-        <!-- Left: Facet Chips -->
-        <div id="stack-chips-${safeId}" class="flex flex-col gap-3 justify-center min-w-max z-20 bg-starlight p-6 rounded-xl h-full">
+        <!-- Left: Facet Chips (Order 2 on Mobile, 1 on Desktop) -->
+        <div id="stack-chips-${safeId}" class="flex flex-col gap-3 justify-center w-full md:w-auto md:min-w-max z-20 bg-starlight p-6 rounded-xl md:h-full order-2 md:order-1">
             <span class="text-void font-bold mb-1 text-center">Aqui está seu produto:</span>
             ${chipsHtml}
         </div>
 
-        <!-- Center: Product Image -->
-        <div class="flex-1 relative h-full w-full">
+        <!-- Center: Product Image (Order 1 on Mobile, 2 on Desktop) -->
+        <div class="relative w-full h-48 md:h-full md:flex-1 order-1 md:order-2">
             <div class="absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105" 
                  style="background-image: url('${bgImage}');">
             </div>
         </div>
 
-        <!-- Right: Buttons -->
-        <div class="flex flex-col gap-4 justify-center min-w-max z-20">
+        <!-- Right: Buttons (Order 3) -->
+        <div class="flex flex-col gap-4 justify-center w-full md:w-auto md:min-w-max z-20 order-3 md:order-3">
             <a id="product-detail-link-${safeId}" href="${BASE_PRODUCT_URL}${product.slug}" target="_blank" 
-               class="bg-starlight hover:bg-starlight/80 text-void font-bold py-3 px-6 rounded-xl text-center transition-all shadow-lg hover:shadow-starlight/20 transform hover:-translate-y-1 w-48">
+               class="bg-starlight hover:bg-starlight/80 text-void font-bold py-3 px-6 rounded-xl text-center transition-all shadow-lg hover:shadow-starlight/20 transform hover:-translate-y-1 w-full md:w-48">
                 Ver Produto
             </a>
             <button id="product-quote-btn-${safeId}" 
-               class="bg-void hover:bg-void/80 text-white font-bold py-3 px-6 rounded-xl text-center transition-all shadow-lg hover:shadow-void/20 transform hover:-translate-y-1 w-48">
+               class="bg-void hover:bg-void/80 text-white font-bold py-3 px-6 rounded-xl text-center transition-all shadow-lg hover:shadow-void/20 transform hover:-translate-y-1 w-full md:w-48">
                 Orçamento
             </button>
         </div>

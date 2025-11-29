@@ -76,12 +76,24 @@
         </div>
     </nav>
 
+    <!-- Mobile Tab Bar -->
+    <div id="mobile-tab-bar" class="lg:hidden flex w-full bg-[#14293D] border-b border-white/10 sticky top-16 z-40">
+        <button id="tab-wizard"
+            class="flex-1 py-3 text-center text-sm font-semibold text-white border-b-2 border-[#36C0F2] transition-colors">
+            Filtros
+        </button>
+        <button id="tab-chat"
+            class="flex-1 py-3 text-center text-sm font-semibold text-gray-400 border-b-2 border-transparent hover:text-white transition-colors">
+            Chat
+        </button>
+    </div>
+
     <!-- Main Content Wrapper -->
-    <main class="flex w-full h-[calc(100vh-64px)]">
+    <main class="flex w-full h-[calc(100vh-64px-48px)] lg:h-[calc(100vh-64px)] relative">
 
         <!-- Left Column: Wizard -->
-        <div id="wizard-column" class="flex-1 flex flex-col overflow-y-auto bg-void relative">
-            <div id="wizard-content-padding" class="p-8 flex-grow">
+        <div id="wizard-column" class="w-full lg:flex-1 flex flex-col overflow-y-auto bg-void relative">
+            <div id="wizard-content-padding" class="p-4 lg:p-8 flex-grow">
 
                 <!-- Progress / Header Area -->
                 <div id="wizard-header" class="mb-8 text-center lg:text-left animate-fade-in">
@@ -122,7 +134,7 @@
 
         <!-- Right Column: Chat Sidebar -->
         <aside id="chat-sidebar"
-            class="hidden lg:flex w-[400px] flex-col h-full border-l border-white/10 bg-surface/30 backdrop-blur-md">
+            class="hidden lg:flex w-full lg:w-[400px] flex-col h-full border-l border-white/10 bg-surface/30 backdrop-blur-md">
             <div id="chat-container" class="flex flex-col h-full overflow-hidden">
 
                 <!-- Chat Messages -->
