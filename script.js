@@ -220,7 +220,7 @@ function createOptionCard(facet, value) {
     const iconClass = getIconForValue(facet, value);
 
     const card = document.createElement('div');
-    card.className = "option-card rounded-xl p-1 cursor-pointer group flex flex-col h-full bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all";
+    card.className = "option-card rounded-xl p-1 cursor-pointer group flex flex-col h-full bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all flex-grow min-w-[165px] basis-[calc(50%-0.75rem)] md:basis-[calc(33.333%-1.25rem)]";
 
     const imageContainer = document.createElement('div');
     imageContainer.className = "relative h-32 md:h-48 rounded-lg overflow-hidden w-full flex items-center justify-center mb-2 md:mb-4 bg-gray-50";

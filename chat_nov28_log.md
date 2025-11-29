@@ -46,3 +46,6 @@ Removed robot icon from AI chat bubble in script.js.
 ## 2025-11-28 22:47:27
 Aligned user chat bubbles to the right in script.js.
 
+## 2025-11-28 22:50:13
+Updated option cards to have min-width 150px and wrap on mobile.
+
