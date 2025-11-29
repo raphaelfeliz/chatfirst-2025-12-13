@@ -91,3 +91,9 @@ Added unique IDs to all HTML elements in index.html and dynamically created elem
 ## 2025-11-29 00:42:38
 Changed option-img-container background color from gray-50 to white in components.js.
 
+## 2025-11-29 02:11:30
+Updated favicon in index.html to point to images/favicon-fabricadoaluminio.png
+
+## 2025-11-29 02:11:43
+Added favicon link to index.html
+
