@@ -57,12 +57,21 @@ body {
     animation: slideUp 0.3s ease-out forwards;
 }
 
-.chat-bubble.ai {
+.chat-bubble.filter-bot {
     background: #ffffff;
     color: #1f2937;
     border-bottom-left-radius: 2px;
     margin-right: auto;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-bubble.gemini-bot {
+    background: #f0f9ff;
+    color: #1f2937;
+    border-bottom-left-radius: 2px;
+    margin-right: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0f2fe;
 }
 
 .chat-bubble.user {

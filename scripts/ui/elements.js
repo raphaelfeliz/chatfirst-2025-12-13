@@ -26,4 +26,11 @@ export const tabChat = document.getElementById('tab-chat');
 // @desc DOM element for the wizard column container.
 export const wizardColumn = document.getElementById('wizard-column');
 // @desc DOM element for the chat sidebar container.
+// @desc DOM element for the chat sidebar container.
 export const chatSidebar = document.getElementById('chat-sidebar');
+
+// Chat Input Refs
+// @desc DOM element for the chat input field.
+export const chatInput = document.getElementById('chat-input-field');
+// @desc DOM element for the chat send button.
+export const chatSendBtn = document.getElementById('chat-send-button');
