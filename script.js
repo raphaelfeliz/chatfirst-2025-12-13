@@ -223,15 +223,15 @@ function createOptionCard(facet, value) {
     card.className = "option-card rounded-xl p-1 cursor-pointer group flex flex-col h-full bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all";
 
     const imageContainer = document.createElement('div');
-    imageContainer.className = "relative h-48 rounded-lg overflow-hidden w-full flex items-center justify-center mb-4 bg-gray-50";
+    imageContainer.className = "relative h-32 md:h-48 rounded-lg overflow-hidden w-full flex items-center justify-center mb-2 md:mb-4 bg-gray-50";
     imageContainer.innerHTML = `
-        <i class="fa-solid ${iconClass} text-6xl text-gray-700 group-hover:text-starlight transition-colors duration-300 z-0"></i>
+        <i class="fa-solid ${iconClass} text-4xl md:text-6xl text-gray-700 group-hover:text-starlight transition-colors duration-300 z-0"></i>
     `;
 
     const content = document.createElement('div');
-    content.className = "p-4 flex-grow flex items-center justify-between";
+    content.className = "p-3 md:p-4 flex-grow flex items-center justify-between";
     content.innerHTML = `
-        <h3 id="option-label-${value}" class="text-xl font-bold text-gray-900 group-hover:text-starlight transition-colors">${label}</h3>
+        <h3 id="option-label-${value}" class="text-base md:text-xl font-bold text-gray-900 group-hover:text-starlight transition-colors">${label}</h3>
         <i class="fa-solid fa-chevron-right text-gray-400 group-hover:text-starlight transform group-hover:translate-x-1 transition-all"></i>
     `;
 
