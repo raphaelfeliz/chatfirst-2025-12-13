@@ -337,12 +337,13 @@ function renderBreadcrumbs(selections) {
  */
 function addChatMessage(text, type, icon = 'fa-comment') {
     const bubble = document.createElement('div');
-    bubble.className = `chat-bubble ${type} mb-4 flex items-start gap-3`;
+    bubble.className = `chat-bubble ${type} mb-4`;
 
     if (type === 'ai') {
         bubble.innerHTML = `
-            <div class="mt-0.5"><i class="fa-solid fa-robot text-nebula"></i></div>
-            <div>${text}</div>
+            <div class="flex-1">
+                ${text}
+            </div>
          `;
     } else {
         bubble.innerHTML = `

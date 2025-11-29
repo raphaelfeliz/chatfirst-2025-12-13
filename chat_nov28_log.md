@@ -40,3 +40,9 @@ Updated design to match reference: Dark Navy background, White Option Cards with
 ## 2025-11-28 22:10:20
 Updated product-results background to a horizontal dark blue gradient in index.html.
 
+## 2025-11-28 22:41:53
+Removed robot icon from AI chat bubble in script.js.
+
+## 2025-11-28 22:47:27
+Aligned user chat bubbles to the right in script.js.
+
