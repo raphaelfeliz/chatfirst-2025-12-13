@@ -79,3 +79,9 @@ Updated update_map.py path, cleared codebase-map.json, and ran initial sync test
 ## 2025-11-28 23:39:56
 Added test variable to app.js and ran update_map.py to verify sync
 
+## 2025-11-29 00:18:02
+Replacing navbar logo icon with favicon-fabricadoaluminio.png
+
+## 2025-11-29 00:22:06
+Removing navbar-title from index.html
+
