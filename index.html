@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Aluminum Configurator</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        void: '#0F172A',
+                        nebula: '#7C3AED',
+                        starlight: '#36C0F2',
+                        surface: 'rgba(17, 24, 39, 0.7)',
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'slide-up': 'slideUp 0.3s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="flex flex-col antialiased selection:bg-nebula selection:text-white h-screen overflow-hidden">
+
+    <!-- Navbar -->
+    <nav class="w-full glass-panel sticky top-0 z-50 border-b border-white/10">
+        <div id="navbar-container" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="navbar-content" class="flex items-center justify-between h-16">
+                <div id="navbar-brand" class="flex items-center gap-3">
+                    <div id="navbar-logo-icon"
+                        class="w-8 h-8 rounded bg-gradient-to-br from-nebula to-starlight flex items-center justify-center shadow-lg shadow-nebula/20">
+                        <i class="fa-solid fa-cube text-white text-sm"></i>
+                    </div>
+                    <span id="navbar-title" class="font-bold text-xl tracking-tight text-white">Alu<span
+                            class="text-starlight">Config</span></span>
+                </div>
+                <button id="restart-button"
+                    class="text-sm font-medium text-gray-400 hover:text-white transition-colors flex items-center gap-2 px-3 py-1.5 rounded hover:bg-white/5">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>Reiniciar</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <main class="flex w-full h-[calc(100vh-64px)]">
+
+        <!-- Left Column: Wizard -->
+        <div id="wizard-column" class="flex-1 flex flex-col overflow-y-auto bg-void relative">
+            <div id="wizard-content-padding" class="p-8 flex-grow">
+
+                <!-- Progress / Header Area -->
+                <div id="wizard-header" class="mb-8 text-center lg:text-left animate-fade-in">
+                    <h1 id="question-title"
+                        class="text-3xl md:text-5xl font-bold text-white mb-4 glow-text leading-tight">
+                        Inicializando...
+                    </h1>
+                    <p id="question-subtitle" class="text-gray-400 text-lg">
+                        Selecione as opções abaixo para encontrar o produto ideal.
+                    </p>
+                </div>
+
+                <!-- Breadcrumbs / Selection History -->
+                <div id="breadcrumb-container"
+                    class="flex flex-wrap gap-2 mb-8 min-h-[30px] opacity-0 transition-opacity duration-500">
+                    <!-- Chips will be injected here -->
+                </div>
+
+                <!-- Options Grid -->
+                <div id="option-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full perspective-1000">
+                    <!-- Options will be injected here -->
+                </div>
+            </div>
+
+            <!-- Result Area (Moved out to fill wizard-column) -->
+            <div id="result-area" class="hidden absolute inset-0 z-50 w-full h-full animate-fade-in bg-void">
+                <div class="w-full h-full bg-gradient-to-r from-[#14293D] to-[#05080c] p-[5%]" id="product-results">
+                    <!-- Final products go here -->
+                </div>
+            </div>
+
+            <!-- Footer (Moved inside scrollable area) -->
+            <footer id="wizard-footer"
+                class="w-full py-6 text-center text-gray-600 text-sm border-t border-white/5 mt-auto">
+                <p id="footer-text">© 2025 Fabricado Alumínio. Engine v1.20.</p>
+            </footer>
+        </div>
+
+        <!-- Right Column: Chat Sidebar -->
+        <aside id="chat-sidebar"
+            class="hidden lg:flex w-[400px] flex-col h-full border-l border-white/10 bg-surface/30 backdrop-blur-md">
+            <div id="chat-container" class="flex flex-col h-full overflow-hidden">
+
+                <!-- Chat Messages -->
+                <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-void/20 scroll-smooth">
+                    <!-- Messages will be injected here via JS -->
+                </div>
+
+                <!-- Chat Input (Dummy) -->
+                <div id="chat-input-area" class="p-4 border-t border-white/5 bg-void/30">
+                    <div id="chat-input-wrapper" class="relative">
+                        <input type="text" disabled placeholder="Selecione uma opção ao lado..."
+                            class="w-full bg-white/5 border border-white/10 rounded-full py-3 px-4 pl-4 pr-12 text-sm text-gray-400 focus:outline-none cursor-not-allowed">
+                        <button disabled
+                            class="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 rounded-full bg-nebula/20 text-nebula flex items-center justify-center">
+                            <i class="fa-solid fa-paper-plane text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </main>
+
+    <!-- LOGIC SCRIPT -->
+    <script src="script.js"></script>
+</body>
+
+</html>
