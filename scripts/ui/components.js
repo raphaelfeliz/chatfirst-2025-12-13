@@ -3,26 +3,56 @@
  * Handles creation of DOM elements for options and products.
  */
 import { FACET_DEFINITIONS, FIELD_MAP, FACET_ORDER } from '../constants.js';
-import { BASE_PRODUCT_URL } from '../productCatalog.js';
+import { BASE_PRODUCT_URL, PRODUCT_CATALOG } from '../productCatalog.js';
+import { applyFilters } from '../logic.js';
 
 export function getIconForValue(facet, value) {
     const def = FACET_DEFINITIONS[facet];
     return (def && def.iconMap && def.iconMap[value]) ? def.iconMap[value] : 'fa-check';
 }
 
-export function createOptionCard(facet, value, onSelect) {
+export function createOptionCard(facet, value, onSelect, selections = {}) {
     const def = FACET_DEFINITIONS[facet];
     const label = def.labelMap[value] || value;
-    const iconClass = getIconForValue(facet, value);
+
+    // Logic to find image
+    let imageUrl = '';
+    let iconClass = getIconForValue(facet, value);
+
+    // 1. Create a temporary selection state including this option
+    const tempSelections = { ...selections, [facet]: value };
+
+    // 2. Filter catalog to see what products match this path
+    const matchingProducts = applyFilters(tempSelections, PRODUCT_CATALOG);
+
+    console.log(`[OptionCard] Facet: ${facet}, Value: ${value}, Matches: ${matchingProducts.length}`);
+
+    if (matchingProducts.length > 0) {
+        // 3. Pick the first match
+        const firstMatch = matchingProducts[0];
+        imageUrl = `images/${firstMatch.image}`;
+        console.log(`   -> Using image: ${imageUrl}`);
+    } else {
+        console.log(`   -> No match, using icon: ${iconClass}`);
+    }
 
     const card = document.createElement('div');
     card.className = "option-card rounded-xl p-1 cursor-pointer group flex flex-col h-full bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all flex-grow min-w-[165px] basis-[calc(50%-0.75rem)] md:basis-[calc(33.333%-1.25rem)]";
 
     const imageContainer = document.createElement('div');
     imageContainer.className = "relative h-32 md:h-48 rounded-lg overflow-hidden w-full flex items-center justify-center mb-2 md:mb-4 bg-gray-50";
-    imageContainer.innerHTML = `
-        <i class="fa-solid ${iconClass} text-4xl md:text-6xl text-gray-700 group-hover:text-starlight transition-colors duration-300 z-0"></i>
-    `;
+
+    if (imageUrl) {
+        imageContainer.innerHTML = `
+            <div class="absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105" 
+                 style="background-image: url('${imageUrl}');">
+            </div>
+        `;
+    } else {
+        imageContainer.innerHTML = `
+            <i class="fa-solid ${iconClass} text-4xl md:text-6xl text-gray-700 group-hover:text-starlight transition-colors duration-300 z-0"></i>
+        `;
+    }
 
     const content = document.createElement('div');
     content.className = "p-3 md:p-4 flex-grow flex items-center justify-between";

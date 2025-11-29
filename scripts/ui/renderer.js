@@ -46,7 +46,7 @@ export function updateView(selections, engineResult, callbacks) {
         titleEl.nextElementSibling.textContent = "";
 
         q.options.forEach((optValue, idx) => {
-            const card = createOptionCard(q.attribute, optValue, callbacks.onOptionSelect);
+            const card = createOptionCard(q.attribute, optValue, callbacks.onOptionSelect, selections);
             // Add staggered animation delay
             card.style.animation = `fadeIn 0.4s ease-out forwards ${idx * 0.1}s`;
             gridEl.appendChild(card);
