@@ -1,39 +1,3 @@
-/**
- * ------------------------------------------------------------------
- * DATA STORE (productCatalog.js embedded)
- * ------------------------------------------------------------------
- */
-const BASE_PRODUCT_URL = "https://fabricadoaluminio.com.br/produto/";
-
-const PRODUCT_CATALOG = [
-    { "slug": "janelasa/janela-de-correr-2-folhas-com-persiana-integrada-motorizada-30.php", "image": "janela_correr_persiana-sim_motorizada_2folhas.webp", "categoria": "janela", "sistema": "janela-correr", "persiana": "sim", "persianaMotorizada": "motorizada", "material": "vidro", "folhas": 2 },
-    { "slug": "janelasa/janela-de-correr-2-folhas-com-persiana-integrada-manual-18.php", "image": "janela_correr_persiana-sim_manual_2folhas.webp", "categoria": "janela", "sistema": "janela-correr", "persiana": "sim", "persianaMotorizada": "manual", "material": "vidro", "folhas": 2 },
-    { "slug": "janelasa/janela-de-correr-2-folhas-com-vidro-temperado-6mm-6.php", "image": "janela_correr_persiana-nao_manual_2folhas.webp", "categoria": "janela", "sistema": "janela-correr", "persiana": "nao", "persianaMotorizada": null, "material": "vidro", "folhas": 2 },
-    { "slug": "janelasa/janela-de-correr-3-folhas-com-vidro-temperado-6mm-37.php", "image": "janela_correr_persiana-nao_manual_3folhas.webp", "categoria": "janela", "sistema": "janela-correr", "persiana": "nao", "persianaMotorizada": null, "material": "vidro", "folhas": 3 },
-    { "slug": "janelasa/janela-de-correr-4-folhas-com-vidro-temperado-6mm-14.php", "image": "janela_correr_persiana-nao_manual_4folhas.webp", "categoria": "janela", "sistema": "janela-correr", "persiana": "nao", "persianaMotorizada": null, "material": "vidro", "folhas": 4 },
-    { "slug": "janelasa/janela-veneziana-3-folhas-com-vidro-temperado-6mm--17.php", "image": "janela_correr_persiana-nao_veneziana_2folhas.webp", "categoria": "janela", "sistema": "janela-correr", "persiana": "nao", "persianaMotorizada": null, "material": "vidro + veneziana", "folhas": 3 },
-    { "slug": "janelasa/janela-de-correr-6-folhas-veneziana-veneziana-vidro.php", "image": "janela_correr_persiana-nao_veneziana_6folhas.webp", "categoria": "janela", "sistema": "janela-correr", "persiana": "nao", "persianaMotorizada": null, "material": "vidro + veneziana", "folhas": 6 },
-    { "slug": "janelasa/janela-maxim-ar-com-1-modulo-com-vidro-13.php", "image": "janela_maxim-ar_persiana-nao_blank_1folhas.webp", "categoria": "janela", "sistema": "maxim-ar", "persiana": "nao", "persianaMotorizada": null, "material": "vidro", "folhas": 1 },
-    { "slug": "janelasa/janela-maxim-ar-2-modulos-com-vidro-9.php", "image": "janela_maxim-ar_persiana-nao_blank_2folhas.webp", "categoria": "janela", "sistema": "maxim-ar", "persiana": "nao", "persianaMotorizada": null, "material": "vidro", "folhas": 2 },
-    { "slug": "janelasa/janela-maxim-ar-com-3-modulos-simetricos-com-vidro-46.php", "image": "janela_maxim-ar_persiana-nao_blank_3folhas.webp", "categoria": "janela", "sistema": "maxim-ar", "persiana": "nao", "persianaMotorizada": null, "material": "vidro", "folhas": 3 },
-    { "slug": "portas/porta-de-correr-2-folhas-com-persiana-integrada-motorizada-32.php", "image": "porta_correr_persiana-sim_motorizada_2folhas.webp", "categoria": "porta", "sistema": "porta-correr", "persiana": "sim", "persianaMotorizada": "motorizada", "material": "vidro", "folhas": 2 },
-    { "slug": "portas/porta-de-correr-2-folhas-com-persiana-integrada-manual-29.php", "image": "porta_correr_persiana-sim_manual_2folhas.webp", "categoria": "porta", "sistema": "porta-correr", "persiana": "sim", "persianaMotorizada": "manual", "material": "vidro", "folhas": 2 },
-    { "slug": "portas/porta-de-correr-2-folhas-com-vidro-temperado-6mm--27.php", "image": "porta_correr_persiana-nao_manual_2folhas.webp", "categoria": "porta", "sistema": "porta-correr", "persiana": "nao", "persianaMotorizada": null, "material": "vidro", "folhas": 2 },
-    { "slug": "portas/porta-de-correr-3-folhas-sequenciais-com-vidro-temperado-6mm--33.php", "image": "porta_correr_persiana-nao_manual_3folhas.webp", "categoria": "porta", "sistema": "porta-correr", "persiana": "nao", "persianaMotorizada": null, "material": "vidro", "folhas": 3 },
-    { "slug": "portas/porta-de-correr-4-folhas-com-vidro-temperado-6mm-38.php", "image": "porta_correr_persiana-nao_blank_4folhas.webp", "categoria": "porta", "sistema": "porta-correr", "persiana": "nao", "persianaMotorizada": null, "material": "vidro", "folhas": 4 },
-    { "slug": "portas/porta-veneziana-de-correr-3-folhas-2-venezianas-e-1-com-vidro-temperado-6mm--31.php", "image": "porta_correr_persiana-nao_veneziana_2folhas.webp", "categoria": "porta", "sistema": "porta-correr", "persiana": "nao", "persianaMotorizada": null, "material": "vidro + veneziana", "folhas": 3 },
-    { "slug": "portas/porta-6-folhas-sendo-2-venezianas-cegas-2-venezianas-perfuradas-e-2-com-vidro-temperado-6mm--45.php", "image": "porta_correr_persiana-nao_blank_6folhas.webp", "categoria": "porta", "sistema": "porta-correr", "persiana": "nao", "persianaMotorizada": null, "material": "vidro + veneziana", "folhas": 6 },
-    { "slug": "portas/porta-de-giro-1-folha-com-lambris-horizontais-34.php", "image": "porta_giro_persiana-nao_lambris_1folhas.webp", "categoria": "porta", "sistema": "giro", "persiana": "nao", "persianaMotorizada": null, "material": "lambri", "folhas": 1 },
-    { "slug": "portas/porta-de-giro-2-folhas-em-lambris-horizontais-40.php", "image": "porta_giro_persiana-nao_lambris_2folhas.webp", "categoria": "porta", "sistema": "giro", "persiana": "nao", "persianaMotorizada": null, "material": "lambri", "folhas": 2 },
-    { "slug": "portas/porta-de-giro-1-folha-veneziana-8.php", "image": "porta_giro_persiana-nao_veneziana_1folhas.webp", "categoria": "porta", "sistema": "giro", "persiana": "nao", "persianaMotorizada": null, "material": "veneziana", "folhas": 1 },
-    { "slug": "portas/porta-de-giro-2-folhas-veneziana-20.php", "image": "porta_giro_persiana-nao_veneziana_2folhas.webp", "categoria": "porta", "sistema": "giro", "persiana": "nao", "persianaMotorizada": null, "material": "veneziana", "folhas": 2 },
-    { "slug": "portas/porta-de-giro-1-folha-com-vidro-temperado-6mm-10.php", "image": "porta_giro_persiana-nao_blank_1folhas.webp", "categoria": "porta", "sistema": "giro", "persiana": "nao", "persianaMotorizada": null, "material": "vidro", "folhas": 1 },
-    { "slug": "portas/porta-de-giro-2-folhas-com-vidro-temperado-6mm-23.php", "image": "porta_giro_persiana-nao_blank_2folhas.webp", "categoria": "porta", "sistema": "giro", "persiana": "nao", "persianaMotorizada": null, "material": "vidro", "folhas": 2 },
-    { "slug": "portas/porta-de-giro-metade-lambris-horizontais-e-metade-com-vidro-temperado-6mm-1-folha-36.php", "image": "porta_giro_persiana-nao_metade-lambris_1folhas.webp", "categoria": "porta", "sistema": "giro", "persiana": "nao", "persianaMotorizada": null, "material": "vidro + lambri", "folhas": 1 },
-    { "slug": "portas/porta-de-giro-2-folhas-metade-em-lambris-horizontais-e-metade-com-vidro-temperado-6mm--39.php", "image": "porta_giro_persiana-nao_metade-lambris_2folhas.webp", "categoria": "porta", "sistema": "giro", "persiana": "nao", "persianaMotorizada": null, "material": "vidro + lambri", "folhas": 2 },
-    { "slug": "portas/porta-de-giro-metade-veneziana-e-metade-vidro-temperado-6mm--11.php", "image": "porta_giro_persiana-nao_metade-veneziana_1folhas.webp", "categoria": "porta", "sistema": "giro", "persiana": "nao", "persianaMotorizada": null, "material": "vidro + veneziana", "folhas": 1 },
-    { "slug": "portas/porta-de-giro-2-folhas-metade-veneziana-e-metade-com-vidro-temperado-6mm-22.php", "image": "porta_giro_persiana-nao_metade-veneziana_2folhas.webp", "categoria": "porta", "sistema": "giro", "persiana": "nao", "persianaMotorizada": null, "material": "vidro + veneziana", "folhas": 2 }
-];
 
 /**
  * ------------------------------------------------------------------
