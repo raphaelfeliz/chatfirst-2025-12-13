@@ -52,3 +52,30 @@ Updated option cards to have min-width 150px and wrap on mobile.
 ## 2025-11-28 22:57:18
 Linked productCatalog.js in index.html to restore data access for script.js
 
+## 2025-11-28 23:13:30
+Created docs/function_mapping/elements-list.json with function mapping and template
+
+## 2025-11-28 23:20:41
+Modularized script.js into scripts/ folder (app.js, logic.js, ui.js, constants.js, productCatalog.js) and updated index.html
+
+## 2025-11-28 23:22:45
+Fixed duplicated HTML content in index.html
+
+## 2025-11-28 23:28:29
+Modularized scripts/ui.js into scripts/ui/ folder (elements, components, chat, navigation, renderer, index)
+
+## 2025-11-28 23:30:03
+Updated docs/function_mapping/elements-list.json to match new modular structure
+
+## 2025-11-28 23:32:15
+Renamed docs/function_mapping/elements-list.json to codebase-map.json
+
+## 2025-11-28 23:36:23
+Created and ran update_map.py to sync codebase-map.json
+
+## 2025-11-28 23:39:45
+Updated update_map.py path, cleared codebase-map.json, and ran initial sync test
+
+## 2025-11-28 23:39:56
+Added test variable to app.js and ran update_map.py to verify sync
+

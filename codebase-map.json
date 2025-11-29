@@ -1,0 +1,365 @@
+{
+  "template-to-follow": [],
+  "elements": [
+    {
+      "name": "APP_INFO",
+      "file": "scripts/app.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "TEST_UPDATE_VARIABLE",
+      "file": "scripts/app.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "CONSTANTS_INFO",
+      "file": "scripts/constants.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "FACET_DEFINITIONS",
+      "file": "scripts/constants.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "FACET_ORDER",
+      "file": "scripts/constants.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "FIELD_MAP",
+      "file": "scripts/constants.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "LOGIC_INFO",
+      "file": "scripts/logic.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "applyFilters",
+      "file": "scripts/logic.js",
+      "type": "function",
+      "signature": "(selections, catalog) => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "calculateNextSelections",
+      "file": "scripts/logic.js",
+      "type": "function",
+      "signature": "(current, facet, value) => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "getProductField",
+      "file": "scripts/logic.js",
+      "type": "function",
+      "signature": "(product, uiFacet) => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "getUniqueOptions",
+      "file": "scripts/logic.js",
+      "type": "function",
+      "signature": "(attribute, products) => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "runFacetLoop",
+      "file": "scripts/logic.js",
+      "type": "function",
+      "signature": "(selections) => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "BASE_PRODUCT_URL",
+      "file": "scripts/productCatalog.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "CATALOG_INFO",
+      "file": "scripts/productCatalog.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "PRODUCT_CATALOG",
+      "file": "scripts/productCatalog.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "addChatMessage",
+      "file": "scripts/ui/chat.js",
+      "type": "function",
+      "signature": "(text, type, icon = 'fa-comment') => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "renderChat",
+      "file": "scripts/ui/chat.js",
+      "type": "function",
+      "signature": "(selections, engineResult) => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "createOptionCard",
+      "file": "scripts/ui/components.js",
+      "type": "function",
+      "signature": "(facet, value, onSelect) => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "createProductCard",
+      "file": "scripts/ui/components.js",
+      "type": "function",
+      "signature": "(product) => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "getIconForValue",
+      "file": "scripts/ui/components.js",
+      "type": "function",
+      "signature": "(facet, value) => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "breadcrumbEl",
+      "file": "scripts/ui/elements.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "chatMessagesEl",
+      "file": "scripts/ui/elements.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "chatSidebar",
+      "file": "scripts/ui/elements.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "gridEl",
+      "file": "scripts/ui/elements.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "productResultsEl",
+      "file": "scripts/ui/elements.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "restartBtn",
+      "file": "scripts/ui/elements.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "resultAreaEl",
+      "file": "scripts/ui/elements.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "tabChat",
+      "file": "scripts/ui/elements.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "tabWizard",
+      "file": "scripts/ui/elements.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "titleEl",
+      "file": "scripts/ui/elements.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "wizardColumn",
+      "file": "scripts/ui/elements.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "UI_INFO",
+      "file": "scripts/ui/index.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "renderBreadcrumbs",
+      "file": "scripts/ui/navigation.js",
+      "type": "function",
+      "signature": "(selections, onReset) => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "switchTab",
+      "file": "scripts/ui/navigation.js",
+      "type": "function",
+      "signature": "(tab) => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "initEventListeners",
+      "file": "scripts/ui/renderer.js",
+      "type": "function",
+      "signature": "(callbacks) => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    },
+    {
+      "name": "updateView",
+      "file": "scripts/ui/renderer.js",
+      "type": "function",
+      "signature": "(selections, engineResult, callbacks) => void",
+      "description": "",
+      "dependencies": [],
+      "sideEffects": false,
+      "category": "Uncategorized"
+    }
+  ]
+}
