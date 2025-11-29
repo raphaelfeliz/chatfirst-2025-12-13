@@ -6,7 +6,9 @@ export function getProductField(product, uiFacet) {
     const productField = FIELD_MAP[uiFacet];
     return product[productField];
 }
+// @desc Gets the value of a product field based on the UI facet.
 
+// @desc Calculates the next selection state after a user choice.
 export function calculateNextSelections(current, facet, value) {
     logger.log('FACET', `Calculating next selections for ${facet} = ${value}`);
     const idx = FACET_ORDER.indexOf(facet);
@@ -23,7 +25,9 @@ export function calculateNextSelections(current, facet, value) {
     }
     return next;
 }
+// @desc Calculates the next selection state after a user choice.
 
+// @desc Filters the product catalog based on user selections.
 export function applyFilters(selections, catalog) {
     const filtered = catalog.filter((p) => {
         for (const facet of FACET_ORDER) {
@@ -43,7 +47,9 @@ export function applyFilters(selections, catalog) {
     logger.log('DATA', `Filtered products: ${filtered.length} remaining`);
     return filtered;
 }
+// @desc Filters the product catalog based on user selections.
 
+// @desc Gets unique options for a facet from the filtered products.
 export function getUniqueOptions(attribute, products) {
     const set = new Set();
     for (const p of products) {
@@ -56,7 +62,9 @@ export function getUniqueOptions(attribute, products) {
     }
     return arr.map(String).sort();
 }
+// @desc Gets unique options for a facet from the filtered products.
 
+// @desc Runs the facet selection loop to determine next questions or final products.
 export function runFacetLoop(selections) {
     logger.group('FACET', 'Running Facet Loop');
     let workingSelections = { ...selections };
@@ -106,3 +114,4 @@ export function runFacetLoop(selections) {
     logger.groupEnd('FACET');
     return { selections: workingSelections, finalProduct: true, finalProducts: finalFiltered, currentQuestion: null };
 }
+// @desc Runs the facet selection loop to determine next questions or final products.

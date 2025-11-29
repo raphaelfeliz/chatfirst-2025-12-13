@@ -3,6 +3,8 @@
  * Provides grouped, labeled, and styled console logs with caller identification.
  */
 
+import { CODEBASE_MAP } from './codebaseMap.js';
+
 const STYLES = {
     'APP': 'background: #007bff; color: white; padding: 2px 5px; border-radius: 3px; font-weight: bold;',
     'FACET': 'background: #6f42c1; color: white; padding: 2px 5px; border-radius: 3px; font-weight: bold;',
@@ -96,6 +98,38 @@ class Logger {
     }
 
     /**
+     * Get details from codebase map
+     * @param {string} callerName 
+     */
+    _getCallerInfo(callerName) {
+        // Remove prefixes like "Object." or "Proxy." or "Logger."
+        const cleanName = callerName.replace(/^(Object\.|Proxy\.|Logger\.)/, '');
+        return CODEBASE_MAP.elements.find(e => e.name === cleanName);
+    }
+
+    /**
+     * Log caller details with expandable group
+     * @param {string} callerName 
+     */
+    _logCallerDetails(callerName) {
+        console.log(`%cCaller: ${callerName}`, 'color: #888; font-style: italic;');
+
+        const info = this._getCallerInfo(callerName);
+        if (info) {
+            console.groupCollapsed(`%cℹ️ Function Details: ${info.name}`, 'color: #666; font-weight: normal; font-size: 0.9em;');
+            console.log(`%cName:`, 'font-weight: bold', info.name);
+            console.log(`%cFile:`, 'font-weight: bold', info.file);
+            console.log(`%cType:`, 'font-weight: bold', info.type);
+            console.log(`%cSignature:`, 'font-weight: bold', info.signature);
+            console.log(`%cDescription:`, 'font-weight: bold', info.description || '(none)');
+            if (info.categories && info.categories.length) console.log(`%cCategories:`, 'font-weight: bold', info.categories.join(', '));
+            if (info.dependencies && info.dependencies.length) console.log(`%cDependencies:`, 'font-weight: bold', info.dependencies.join(', '));
+            if (info.sideEffects !== undefined) console.log(`%cSide Effects:`, 'font-weight: bold', info.sideEffects);
+            console.groupEnd();
+        }
+    }
+
+    /**
      * Helper to log objects in a readable, collapsed format
      * @param {string} label 
      * @param {any} data 
@@ -121,20 +155,35 @@ class Logger {
 
     /**
      * Standard log with label
-     * @param {string} label 
-     * @param {string} message 
-     * @param {any} data 
+     * Supports: log(label, message, data) OR log(message, data) [Auto-label]
      */
-    log(label, message, data = null) {
-        if (!this.enabled || !this.enabledLabels.has(label)) return;
+    log(arg1, arg2, arg3 = null) {
+        if (!this.enabled) return;
+
+        const caller = this._getCaller();
+        let label, message, data;
+
+        // Check if arg1 is a known label
+        if (STYLES[arg1] || (this.enabledLabels.has(arg1))) {
+            label = arg1;
+            message = arg2;
+            data = arg3;
+        } else {
+            // Auto-label mode
+            const info = this._getCallerInfo(caller);
+            label = (info && info.categories && info.categories.length > 0) ? info.categories[0] : 'DEFAULT';
+            message = arg1;
+            data = arg2;
+        }
+
+        if (!this.enabledLabels.has(label)) return;
 
         const style = this._getStyle(label);
         const emoji = this._getEmoji(label);
-        const caller = this._getCaller();
 
         console.groupCollapsed(`%c${emoji} [${label}] ${message}`, style);
-        console.log(`%cCaller: ${caller}`, 'color: #888; font-style: italic;');
-        if (data !== null) {
+        this._logCallerDetails(caller);
+        if (data !== null && data !== undefined) {
             this._logObject('Data', data);
         }
         console.groupEnd();
@@ -142,18 +191,30 @@ class Logger {
 
     /**
      * Start a collapsed group
-     * @param {string} label 
-     * @param {string} title 
+     * Supports: group(label, title) OR group(title) [Auto-label]
      */
-    group(label, title) {
-        if (!this.enabled || !this.enabledLabels.has(label)) return;
+    group(arg1, arg2) {
+        if (!this.enabled) return;
+
+        const caller = this._getCaller();
+        let label, title;
+
+        if (STYLES[arg1] || (this.enabledLabels.has(arg1))) {
+            label = arg1;
+            title = arg2;
+        } else {
+            const info = this._getCallerInfo(caller);
+            label = (info && info.categories && info.categories.length > 0) ? info.categories[0] : 'DEFAULT';
+            title = arg1;
+        }
+
+        if (!this.enabledLabels.has(label)) return;
 
         const style = this._getStyle(label);
         const emoji = this._getEmoji(label);
-        const caller = this._getCaller();
 
         console.groupCollapsed(`%c${emoji} [${label}] ${title}`, style);
-        console.log(`%cCaller: ${caller}`, 'color: #888; font-style: italic;');
+        this._logCallerDetails(caller);
     }
 
     /**
@@ -172,20 +233,34 @@ class Logger {
 
     /**
      * Track variable change
-     * @param {string} label 
-     * @param {string} variableName 
-     * @param {any} oldValue 
-     * @param {any} newValue 
+     * Supports: track(label, varName, old, new) OR track(varName, old, new) [Auto-label]
      */
-    track(label, variableName, oldValue, newValue) {
-        if (!this.enabled || !this.enabledLabels.has(label)) return;
+    track(arg1, arg2, arg3, arg4) {
+        if (!this.enabled) return;
+
+        const caller = this._getCaller();
+        let label, variableName, oldValue, newValue;
+
+        if (STYLES[arg1] || (this.enabledLabels.has(arg1))) {
+            label = arg1;
+            variableName = arg2;
+            oldValue = arg3;
+            newValue = arg4;
+        } else {
+            const info = this._getCallerInfo(caller);
+            label = (info && info.categories && info.categories.length > 0) ? info.categories[0] : 'DEFAULT';
+            variableName = arg1;
+            oldValue = arg2;
+            newValue = arg3;
+        }
+
+        if (!this.enabledLabels.has(label)) return;
 
         const style = this._getStyle(label);
         const emoji = this._getEmoji(label);
-        const caller = this._getCaller();
 
         console.groupCollapsed(`%c${emoji} [${label}] UPDATE: ${variableName}`, style);
-        console.log(`%cCaller: ${caller}`, 'color: #888; font-style: italic;');
+        this._logCallerDetails(caller);
 
         this._logObject('Previous', oldValue, '#dc3545');
         this._logObject('New', newValue, '#28a745');
@@ -194,4 +269,5 @@ class Logger {
     }
 }
 
+// @desc Structured console logger providing grouped, labeled, and styled console logs with caller identification
 export const logger = new Logger();

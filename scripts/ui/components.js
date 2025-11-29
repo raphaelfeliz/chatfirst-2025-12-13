@@ -6,11 +6,13 @@ import { FACET_DEFINITIONS, FIELD_MAP, FACET_ORDER } from '../constants.js';
 import { BASE_PRODUCT_URL, PRODUCT_CATALOG } from '../productCatalog.js';
 import { applyFilters } from '../logic.js';
 
+// @desc Gets the icon for a facet value.
 export function getIconForValue(facet, value) {
     const def = FACET_DEFINITIONS[facet];
     return (def && def.iconMap && def.iconMap[value]) ? def.iconMap[value] : 'fa-check';
 }
 
+// @desc Creates a DOM card element for a facet option with image and click handling.
 export function createOptionCard(facet, value, onSelect, selections = {}) {
     const def = FACET_DEFINITIONS[facet];
     const label = def.labelMap[value] || value;
@@ -70,6 +72,7 @@ export function createOptionCard(facet, value, onSelect, selections = {}) {
     return card;
 }
 
+// @desc Creates a DOM card element displaying product details with actions.
 export function createProductCard(product) {
     const card = document.createElement('div');
     // Flex column on mobile, row on desktop

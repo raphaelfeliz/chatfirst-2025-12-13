@@ -9,12 +9,14 @@ import * as UI from './ui/index.js';
 import { logger } from './utils/logger.js';
 
 export const TEST_UPDATE_VARIABLE = "I should appear in the map";
+// @desc Variable used to confirm update and mapping in codebase.
 
 export const APP_INFO = {
     module: "Main Application",
     versionName: "Orchestrator",
     versionNumber: "1.0.0"
 };
+// @desc Metadata object for the main application orchestrator.
 
 // --- State ---
 let currentSelections = {

@@ -8,8 +8,10 @@ import { logger } from '../utils/logger.js';
 
 let messageCount = 0;
 
+// @desc Adds a chat message bubble to the chat interface.
 export function addChatMessage(text, type, icon = 'fa-comment') {
     logger.log('CHAT', `Adding message (${type}): "${text.substring(0, 30)}..."`);
+
     messageCount++;
     const bubble = document.createElement('div');
     bubble.id = `chat-message-${messageCount}`;
@@ -30,6 +32,7 @@ export function addChatMessage(text, type, icon = 'fa-comment') {
     chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
 }
 
+// @desc Renders the chat interface with messages based on selections and engine results.
 export function renderChat(selections, engineResult) {
     chatMessagesEl.innerHTML = ''; // Clear chat to rebuild based on current state
     messageCount = 0; // Reset counter on re-render

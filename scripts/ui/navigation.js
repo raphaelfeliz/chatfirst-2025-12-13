@@ -5,6 +5,7 @@
 import { breadcrumbEl, tabWizard, tabChat, wizardColumn, chatSidebar } from './elements.js';
 import { FACET_ORDER, FACET_DEFINITIONS } from '../constants.js';
 
+// @desc Renders breadcrumb navigation from current selections.
 export function renderBreadcrumbs(selections, onReset) {
     breadcrumbEl.innerHTML = '';
     let hasItems = false;
@@ -32,6 +33,7 @@ export function renderBreadcrumbs(selections, onReset) {
     breadcrumbEl.style.opacity = hasItems ? '1' : '0';
 }
 
+// @desc Switches between wizard and chat tabs in mobile view.
 export function switchTab(tab) {
     if (tab === 'wizard') {
         // Show Wizard, Hide Chat

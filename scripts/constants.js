@@ -8,10 +8,13 @@ export const CONSTANTS_INFO = {
     versionName: "Base",
     versionNumber: "1.0.0"
 };
+// @desc Metadata object for constants and configuration.
 
 export const FACET_ORDER = ['categoria', 'sistema', 'persiana', 'motorizada', 'material', 'folhas'];
+// @desc Array defining the order of facets for product selection.
 
 export const FACET_DEFINITIONS = {
+    // @desc Object containing definitions for each facet, including labels and icons.
     categoria: { title: 'O que você procura?', labelMap: { janela: 'Janela', porta: 'Porta' }, iconMap: { janela: 'fa-table-columns', porta: 'fa-door-open' } },
     sistema: { title: 'Qual sistema de abertura?', labelMap: { 'janela-correr': 'De Correr', 'porta-correr': 'De Correr', 'maxim-ar': 'Maxim-ar', 'giro': 'De Giro' }, iconMap: { 'janela-correr': 'fa-arrows-left-right', 'porta-correr': 'fa-arrows-left-right', 'maxim-ar': 'fa-up-right-and-down-left-from-center', 'giro': 'fa-rotate' } },
     persiana: { title: 'Precisa de persiana integrada?', labelMap: { sim: 'Com Persiana', nao: 'Sem Persiana' }, iconMap: { sim: 'fa-layer-group', nao: 'fa-ban' } },
@@ -28,3 +31,4 @@ export const FIELD_MAP = {
     material: 'material',
     folhas: 'folhas'
 };
+// @desc Object mapping UI facet names to product catalog field names.

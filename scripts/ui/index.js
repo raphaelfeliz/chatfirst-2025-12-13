@@ -2,6 +2,7 @@
  * UI Module Entry Point
  * Exports all UI functionality.
  */
+// @desc Metadata object for the UI module.
 export const UI_INFO = {
     module: "UI Renderer",
     versionName: "Modular",

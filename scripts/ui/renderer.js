@@ -7,6 +7,7 @@ import { renderBreadcrumbs, switchTab } from './navigation.js';
 import { renderChat } from './chat.js';
 import { createOptionCard, createProductCard } from './components.js';
 
+// @desc Updates the entire view based on selections and engine results.
 export function updateView(selections, engineResult, callbacks) {
     // Clear Grid
     gridEl.innerHTML = '';
@@ -54,6 +55,7 @@ export function updateView(selections, engineResult, callbacks) {
     }
 }
 
+// @desc Initializes all event listeners for UI interactions.
 export function initEventListeners(callbacks) {
     if (tabWizard && tabChat) {
         tabWizard.addEventListener('click', () => switchTab('wizard'));
