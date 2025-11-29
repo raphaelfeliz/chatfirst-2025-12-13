@@ -85,3 +85,9 @@ Replacing navbar logo icon with favicon-fabricadoaluminio.png
 ## 2025-11-29 00:22:06
 Removing navbar-title from index.html
 
+## 2025-11-29 00:41:30
+Added unique IDs to all HTML elements in index.html and dynamically created elements in components.js, chat.js, and navigation.js for better testability and debugging.
+
+## 2025-11-29 00:42:38
+Changed option-img-container background color from gray-50 to white in components.js.
+

@@ -1,16 +1,6 @@
-/**
- * ------------------------------------------------------------------
- * MODULE: Logic Engine
- * ------------------------------------------------------------------
- */
 import { FACET_ORDER, FACET_DEFINITIONS, FIELD_MAP } from './constants.js';
 import { PRODUCT_CATALOG } from './productCatalog.js';
-
-export const LOGIC_INFO = {
-    module: "Logic Engine",
-    versionName: "Core",
-    versionNumber: "1.0.0"
-};
+import { logger } from './utils/logger.js';
 
 export function getProductField(product, uiFacet) {
     const productField = FIELD_MAP[uiFacet];
@@ -18,6 +8,7 @@ export function getProductField(product, uiFacet) {
 }
 
 export function calculateNextSelections(current, facet, value) {
+    logger.log('FACET', `Calculating next selections for ${facet} = ${value}`);
     const idx = FACET_ORDER.indexOf(facet);
     // Copy current
     const next = { ...current };
@@ -34,7 +25,7 @@ export function calculateNextSelections(current, facet, value) {
 }
 
 export function applyFilters(selections, catalog) {
-    return catalog.filter((p) => {
+    const filtered = catalog.filter((p) => {
         for (const facet of FACET_ORDER) {
             const sel = selections[facet];
             if (sel == null) continue;
@@ -49,6 +40,8 @@ export function applyFilters(selections, catalog) {
         }
         return true;
     });
+    logger.log('DATA', `Filtered products: ${filtered.length} remaining`);
+    return filtered;
 }
 
 export function getUniqueOptions(attribute, products) {
@@ -65,6 +58,7 @@ export function getUniqueOptions(attribute, products) {
 }
 
 export function runFacetLoop(selections) {
+    logger.group('FACET', 'Running Facet Loop');
     let workingSelections = { ...selections };
 
     for (const facet of FACET_ORDER) {
@@ -77,6 +71,8 @@ export function runFacetLoop(selections) {
         let currentFiltered = applyFilters(workingSelections, PRODUCT_CATALOG);
 
         if (currentFiltered.length <= 1) {
+            logger.log('FACET', 'Loop End: <= 1 product found');
+            logger.groupEnd('FACET');
             return { selections: workingSelections, finalProduct: true, finalProducts: currentFiltered, currentQuestion: null };
         }
 
@@ -84,6 +80,8 @@ export function runFacetLoop(selections) {
 
         if (options.length > 1) {
             const def = FACET_DEFINITIONS[facet];
+            logger.log('FACET', `Next Question: ${facet} (${options.length} options)`);
+            logger.groupEnd('FACET');
             return {
                 selections: workingSelections,
                 finalProduct: false,
@@ -94,12 +92,17 @@ export function runFacetLoop(selections) {
 
         if (options.length === 1) {
             workingSelections[facet] = options[0];
+            logger.log('FACET', `Auto-selecting ${facet} = ${options[0]}`);
         } else {
             // 0 options - stuck
+            logger.log('FACET', 'Loop End: 0 options found (Stuck)');
+            logger.groupEnd('FACET');
             return { selections: workingSelections, finalProduct: true, finalProducts: [], currentQuestion: null };
         }
     }
 
     const finalFiltered = applyFilters(workingSelections, PRODUCT_CATALOG);
+    logger.log('FACET', 'Loop End: All facets processed');
+    logger.groupEnd('FACET');
     return { selections: workingSelections, finalProduct: true, finalProducts: finalFiltered, currentQuestion: null };
 }

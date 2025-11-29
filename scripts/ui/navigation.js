@@ -19,7 +19,7 @@ export function renderBreadcrumbs(selections, onReset) {
             const chip = document.createElement('button');
             chip.id = `breadcrumb-chip-${facet}`;
             chip.className = "flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition-all hover:border-nebula/50 animate-fade-in";
-            chip.innerHTML = `<span id="breadcrumb-text-${facet}">${label}</span> <i class="fa-solid fa-xmark text-xs opacity-50 hover:opacity-100"></i>`;
+            chip.innerHTML = `<span id="breadcrumb-text-${facet}">${label}</span> <i id="breadcrumb-remove-${facet}" class="fa-solid fa-xmark text-xs opacity-50 hover:opacity-100"></i>`;
 
             chip.addEventListener('click', () => {
                 if (onReset) onReset(facet, index);

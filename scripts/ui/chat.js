@@ -4,20 +4,26 @@
  */
 import { chatMessagesEl } from './elements.js';
 import { FACET_DEFINITIONS, FACET_ORDER } from '../constants.js';
+import { logger } from '../utils/logger.js';
+
+let messageCount = 0;
 
 export function addChatMessage(text, type, icon = 'fa-comment') {
+    logger.log('CHAT', `Adding message (${type}): "${text.substring(0, 30)}..."`);
+    messageCount++;
     const bubble = document.createElement('div');
+    bubble.id = `chat-message-${messageCount}`;
     bubble.className = `chat-bubble ${type} mb-4`;
 
     if (type === 'ai') {
         bubble.innerHTML = `
-            <div class="flex-1">
+            <div id="chat-message-content-${messageCount}" class="flex-1">
                 ${text}
             </div>
          `;
     } else {
         bubble.innerHTML = `
-            <div>${text}</div>
+            <div id="chat-message-content-${messageCount}">${text}</div>
          `;
     }
     chatMessagesEl.appendChild(bubble);
@@ -25,7 +31,8 @@ export function addChatMessage(text, type, icon = 'fa-comment') {
 }
 
 export function renderChat(selections, engineResult) {
-    chatMessagesEl.innerHTML = ''; // Clear chat to rebuild based on current state (mimic logic)
+    chatMessagesEl.innerHTML = ''; // Clear chat to rebuild based on current state
+    messageCount = 0; // Reset counter on re-render
 
     // 1. Initial Greeting
     addChatMessage("Olá! Sou o assistente virtual da AluConfig. Vou te ajudar a encontrar a esquadria perfeita.", 'ai');

@@ -1,14 +1,3 @@
-/**
- * ------------------------------------------------------------------
- * MODULE: Product Catalog
- * ------------------------------------------------------------------
- */
-export const CATALOG_INFO = {
-    module: "Product Catalog",
-    versionName: "Base",
-    versionNumber: "1.0.0"
-};
-
 export const BASE_PRODUCT_URL = "https://fabricadoaluminio.com.br/produto/";
 
 export const PRODUCT_CATALOG = [
