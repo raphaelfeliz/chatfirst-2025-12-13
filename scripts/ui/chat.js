@@ -10,7 +10,7 @@ let messageCount = 0;
 
 // @desc Adds a chat message bubble to the chat interface.
 export function addChatMessage(text, type, icon = 'fa-comment') {
-    logger.log('CHAT', `Adding message (${type}): "${text.substring(0, 30)}..."`);
+    logger.log('CHAT', `Adding message (${type}): "${typeof text === 'string' ? text.substring(0, 30) : 'Object'}..."`);
 
     messageCount++;
     const bubble = document.createElement('div');
@@ -19,7 +19,12 @@ export function addChatMessage(text, type, icon = 'fa-comment') {
     // Map 'ai' to 'filter-bot' for backward compatibility if needed, though we should use specific types
     const displayType = type === 'ai' ? 'filter-bot' : type;
 
-    bubble.className = `chat-bubble ${displayType} mb-4`;
+    // Adjust margin based on type to group related elements closer (chips, image, buttons)
+    // User requested ~5px gap. Tailwind mb-1 is 4px, mb-1.5 is 6px. Let's use arbitrary value for precision or mb-1.
+    const isProductElement = ['product-chips', 'product-image', 'button'].includes(displayType);
+    const marginBottom = isProductElement ? 'mb-0' : 'mb-4';
+
+    bubble.className = `chat-bubble ${displayType} ${marginBottom}`;
 
     // Bot types (filter-bot, gemini-bot) share similar left-aligned styling
     if (displayType === 'filter-bot' || displayType === 'gemini-bot') {
@@ -28,6 +33,48 @@ export function addChatMessage(text, type, icon = 'fa-comment') {
                 ${text}
             </div>
          `;
+    } else if (displayType === 'product-chips') {
+        // Chips Display
+        // text is expected to be an array of strings (the chips)
+        const chips = Array.isArray(text) ? text : [];
+        const chipsHtml = chips.map(chip =>
+            `<span class="inline-block bg-starlight/10 text-starlight border border-starlight/20 rounded-full px-3 py-1 text-xs font-medium mr-2 mb-2">${chip}</span>`
+        ).join('');
+
+        bubble.innerHTML = `
+            <div id="chat-message-content-${messageCount}" class="flex-1">
+                <p class="mb-2 font-semibold text-white">Encontrei! Segue o resumo:</p>
+                <div class="flex flex-wrap">
+                    ${chipsHtml}
+                </div>
+            </div>
+        `;
+    } else if (displayType === 'product-image') {
+        // Product Image Display
+        // text is expected to be the image URL
+        // Use w-fit to wrap image tightly, remove w-full from img to allow natural aspect ratio
+        bubble.innerHTML = `
+            <div id="chat-message-content-${messageCount}" class="flex-1 w-fit overflow-hidden rounded-lg border border-white/10 bg-white/5">
+                <img src="${text}" alt="Product Image" class="block max-w-full h-auto max-h-60 object-contain">
+            </div>
+        `;
+    } else if (displayType === 'button') {
+        // Button Display
+        // text is expected to be an object: { label, url, variant }
+        const { label, url, variant } = text;
+        const isPrimary = variant === 'primary';
+
+        const btnClasses = isPrimary
+            ? "bg-starlight hover:bg-starlight/80 text-void"
+            : "bg-void hover:bg-void/80 text-white border border-white/20";
+
+        bubble.innerHTML = `
+            <div id="chat-message-content-${messageCount}" class="flex-1">
+                <a href="${url}" target="_blank" class="block w-full text-center font-bold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 ${btnClasses}">
+                    ${label}
+                </a>
+            </div>
+        `;
     } else {
         // User type
         bubble.innerHTML = `
@@ -96,7 +143,37 @@ export function renderChat(selections, engineResult) {
     // 3. Current State
     if (engineResult.finalProduct) {
         if (engineResult.finalProducts.length > 0) {
-            addChatMessage(`Ótima notícia! Encontrei <strong>${engineResult.finalProducts.length}</strong> produtos que combinam com o que você precisa. Dê uma olhada nas opções ao lado.`, 'filter-bot');
+            // Phase 1: Chips
+            const product = engineResult.finalProducts[0];
+            const chips = [];
+            FACET_ORDER.forEach(facet => {
+                if (selections[facet]) {
+                    const def = FACET_DEFINITIONS[facet];
+                    chips.push(def.labelMap[selections[facet]] || selections[facet]);
+                }
+            });
+
+            addChatMessage(chips, 'product-chips');
+
+            // Phase 2: Product Image
+            const imageUrl = `images/${product.image}`;
+            addChatMessage(imageUrl, 'product-image');
+
+            // Phase 3: Buttons
+            const baseUrl = "https://fabricadoaluminio.com.br/produto/";
+
+            addChatMessage({
+                label: "Ver Produto",
+                url: `${baseUrl}${product.slug}`,
+                variant: 'primary'
+            }, 'button');
+
+            addChatMessage({
+                label: "Orçamento",
+                url: "#", // Placeholder for now
+                variant: 'secondary'
+            }, 'button');
+
         } else {
             addChatMessage("Hmm, parece que não encontrei nenhum produto exato com essa combinação. Tente mudar algumas das opções anteriores.", 'filter-bot');
         }
