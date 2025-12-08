@@ -104,10 +104,10 @@ export function createProductCard(product) {
         </div>
 
         <!-- Center: Product Image (Order 1 on Mobile, 2 on Desktop) -->
-        <div id="product-image-container-${safeId}" class="relative w-full h-48 md:h-full md:flex-1 order-1 md:order-2">
-            <div id="product-image-${safeId}" class="absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105" 
-                 style="background-image: url('${bgImage}');">
-            </div>
+        <div id="product-image-container-${safeId}" class="w-full md:self-stretch md:flex-1 order-1 md:order-2 flex items-center justify-center">
+            <img id="product-image-${safeId}" src="${bgImage}" draggable="false"
+                 class="w-full h-auto md:max-h-full md:w-auto md:object-contain transition-transform duration-700 group-hover:scale-105" 
+                 alt="Product Image">
         </div>
 
         <!-- Right: Buttons (Order 3) -->
