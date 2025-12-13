@@ -36,7 +36,7 @@ export function createOptionCard(facet, value, onSelect, selections = {}) {
 
     const card = document.createElement('div');
     card.id = `option-card-${facet}-${value}`;
-    card.className = "option-card rounded-xl p-1 cursor-pointer group flex flex-col h-full bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all flex-grow min-w-[165px] basis-[calc(50%-0.75rem)] md:basis-[calc(33.333%-1.25rem)]";
+    card.className = "option-card rounded-xl p-1 cursor-pointer group flex flex-col h-full bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all";
 
     const imageContainer = document.createElement('div');
     imageContainer.id = `option-img-container-${facet}-${value}`;
@@ -56,10 +56,9 @@ export function createOptionCard(facet, value, onSelect, selections = {}) {
 
     const content = document.createElement('div');
     content.id = `option-content-${facet}-${value}`;
-    content.className = "p-3 md:p-4 flex-grow flex items-center justify-between";
+    content.className = "p-2 flex-grow text-center";
     content.innerHTML = `
-        <h3 id="option-label-${facet}-${value}" class="text-base md:text-xl font-bold text-gray-900 group-hover:text-starlight transition-colors">${label}</h3>
-        <i id="option-chevron-${facet}-${value}" class="fa-solid fa-chevron-right text-gray-400 group-hover:text-starlight transform group-hover:translate-x-1 transition-all"></i>
+        <h3 id="option-label-${facet}-${value}" class="text-sm md:text-base font-bold text-gray-900 group-hover:text-starlight transition-colors">${label}</h3>
     `;
 
     card.appendChild(imageContainer);
