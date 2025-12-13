@@ -36,7 +36,7 @@ export function createOptionCard(facet, value, onSelect, selections = {}) {
 
     const card = document.createElement('div');
     card.id = `option-card-${facet}-${value}`;
-    card.className = "option-card rounded-xl p-1 cursor-pointer group flex flex-col h-full bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all";
+    card.className = "option-card rounded-xl p-1 cursor-pointer group flex flex-col bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all w-[250px] h-[250px]";
 
     const imageContainer = document.createElement('div');
     imageContainer.id = `option-img-container-${facet}-${value}`;
