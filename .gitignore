@@ -1,0 +1,9 @@
+# Ignore secret keys and sensitive configs
+.secrets/
+.keys/
+
+# Node / Python artifacts (future-proofing)
+node_modules/
+.env
+*.pyc
+__pycache__/

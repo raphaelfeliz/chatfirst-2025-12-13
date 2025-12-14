@@ -1,182 +1,198 @@
-# PATH: main.py
-# ENDPOINT: https://gemini-endpoint-yf2trly67a-uc.a.run.app/
-# PURPOSE: Provides an HTTP endpoint to query the Google Gemini API.
-# HOW: Receives a POST request with a user prompt and the current application state.
-# 	   It then instructs the Gemini model to return a strict, structured JSON
-# 	 response which is forwarded to the original caller. Handles CORS.
-#
-import functions_framework
+try:
+    import functions_framework
+except ImportError:
+    # Mock for local testing without the package
+    class functions_framework:
+        @staticmethod
+        def http(func):
+            return func
+
 import json
 import os
-import google.generativeai as genai
 import sys
-import yaml
+try:
+    import yaml
+except ImportError:
+    # Mock for local testing
+    class yaml:
+        @staticmethod
+        def safe_load(f):
+            return {"mock": "data"}
 
 try:
-	API_KEY = os.environ["GEMINI_API_KEY"]
-except KeyError:
-	raise RuntimeError("GEMINI_API_KEY environment variable not set.") from None
+    import google.generativeai as genai
+except ImportError:
+    # Mock for local testing
+    class genai:
+        @staticmethod
+        def configure(api_key): pass
+        class GenerativeModel:
+            def __init__(self, model_name): pass
+            def generate_content(self, prompt, generation_config=None):
+                # Return a mock response object
+                class Response:
+                    text = '{"status": "success", "message": "Mock response", "data": {"target": "product-choice", "payload": {}}}'
+                return Response()
 
-try:
-	with open('kb.yaml', 'r', encoding='utf-8') as f:
-		knowledge_base = yaml.safe_load(f)
-	# Garante que o KB_CONTENT seja um string JSON, não um objeto Python
-	KB_CONTENT = json.dumps(knowledge_base, indent=2, ensure_ascii=False)
-except Exception as e:
-	print(json.dumps({"severity": "ERROR", "message": f"Could not load knowledge base: {e}"}), file=sys.stderr)
-	KB_CONTENT = "{}"
+
+# Configuration
+MODEL_NAME = "gemini-2.5-flash"
+KB_FILE = "kb.yaml"
+
+# Global Cache
+_KB_CONTENT = None
+
+def load_knowledge_base():
+    """Loads and caches the knowledge base from disk."""
+    global _KB_CONTENT
+    if _KB_CONTENT:
+        return _KB_CONTENT
+    
+    try:
+        with open(KB_FILE, 'r', encoding='utf-8') as f:
+            kb_data = yaml.safe_load(f)
+        _KB_CONTENT = json.dumps(kb_data, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"Error loading KB: {e}", file=sys.stderr)
+        _KB_CONTENT = "{}"
+    
+    return _KB_CONTENT
+
+def build_system_prompt(user_prompt, product_choice, user_data, kb_content):
+    """Constructs the system prompt based on the 3-priority mission architecture."""
+    
+    # Context Serialization
+    ctx_product = json.dumps(product_choice, ensure_ascii=False) if product_choice else "None"
+    ctx_user = json.dumps(user_data, ensure_ascii=False) if user_data else "{}"
+
+    return f"""
+    You are a specialized Window & Door Configurator Agent.
+    Your goal is to process the user's request and return a SINGLE JSON object.
+
+    **CONTEXT**
+    - User Prompt: "{user_prompt}"
+    - Current Product: {ctx_product}
+    - User Data: {ctx_user}
+
+    **KNOWLEDGE BASE**
+    {kb_content}
+
+    **MISSIONS (IN ORDER OF PRIORITY)**
+
+    1. **PRIORITY 1: HUMAN HANDOFF (EXIT)**
+       - CHECK: Does the user explicitly ask for a human, price, buying, or negotiation?
+       - ACTION: Stop configuration. Set `target: "user-data"` and `payload: {{ "talkToHuman": true }}`.
+       - MESSAGE: Friendly acknowledgment and handoff.
+
+    2. **PRIORITY 2: DATA COLLECTION (LEAD)**
+       - CHECK: Is `talkToHuman` TRUE in User Data?
+       - ACTION: Extract `userName`, `userPhone`, or `userEmail` from the prompt.
+       - OUTPUT: Set `target: "user-data"` with extracted fields.
+       - MESSAGE: Confirm receipt or ask for missing info.
+
+    3. **PRIORITY 3: PRODUCT CONFIGURATION (CORE)**
+       - CHECK: Default if P1 and P2 are not met.
+       - ACTION: Map user intent to valid product attributes.
+       - VALID ATTRIBUTES:
+         - categoria: "janela" | "porta"
+         - sistema: "janela-correr" | "porta-correr" | "maxim-ar" | "giro"
+         - persiana: "sim" | "nao"
+         - persianaMotorizada: "motorizada" | "manual" (only if persiana="sim")
+         - material: "vidro" | "vidro + veneziana" | "lambri" | "veneziana" | "vidro + lambri"
+         - folhas: 1 | 2 | 3 | 4 | 6
+       - OUTPUT: Set `target: "product-choice"` with identified attributes.
+       - MESSAGE: Helpful guidance or confirmation based on the KB.
+
+    **OUTPUT SCHEMA (STRICT JSON)**
+    {{
+      "status": "success",
+      "message": "User-facing message in Portuguese",
+      "data": {{
+        "target": "product-choice" | "user-data",
+        "payload": {{ ...values... }}
+      }}
+    }}
+    """
 
 @functions_framework.http
 def gemini_endpoint(request):
-	"""
-	HTTP Cloud Function to send prompts and current state to Gemini and return a
-	structured, non-destructive JSON reply for the configurator application.
-	"""
-	if request.method == "OPTIONS":
-		headers = {
-			"Access-Control-Allow-Origin": "*",
-			"Access-Control-Allow-Methods": "POST, OPTIONS",
-			"Access-Control-Allow-Headers": "Content-Type",
-			"Access-Control-Max-Age": "3600",
-		}
-		return ("", 204, headers)
+    """HTTP Cloud Function entry point."""
+    
+    # CORS Headers
+    headers = {"Access-Control-Allow-Origin": "*"}
+    if request.method == "OPTIONS":
+        headers.update({
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Max-Age": "3600",
+        })
+        return ("", 204, headers)
 
-	headers = {"Access-Control-Allow-Origin": "*"}
+    # Input Validation
+    try:
+        req_json = request.get_json(silent=True)
+        if not req_json or "prompt" not in req_json:
+            return (json.dumps({"status": "error", "message": "Missing 'prompt'"}), 400, headers)
+    except Exception:
+        return (json.dumps({"status": "error", "message": "Invalid JSON"}), 400, headers)
 
-	try:
-		request_json = request.get_json(silent=True)
-		if not request_json:
-			raise ValueError("Invalid JSON")
-	except Exception as e:
-		return (json.dumps({"status": "error", "message": "Malformed JSON in request."}), 400, headers)
+    # Execution
+    try:
+        api_key = os.environ.get("GEMINI_API_KEY")
+        if not api_key:
+            raise RuntimeError("GEMINI_API_KEY not set")
 
-	if not (request_json and "prompt" in request_json and request_json["prompt"]):
-		return (json.dumps({"status": "error", "message": "A non-empty 'prompt' must be provided."}), 400, headers)
+        kb_content = load_knowledge_base()
+        system_prompt = build_system_prompt(
+            req_json["prompt"],
+            req_json.get("productChoice"),
+            req_json.get("userData"),
+            kb_content
+        )
 
-	# 1. Extrair todos os dados do request
-	user_prompt = request_json["prompt"]
-	product_choice = request_json.get("productChoice", {})
-	user_data = request_json.get("userData", {})
-	model_name = request_json.get("model", "gemini-2.5-flash")
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel(req_json.get("model", MODEL_NAME))
+        
+        response = model.generate_content(
+            system_prompt,
+            generation_config={"temperature": 0.0, "response_mime_type": "application/json"}
+        )
 
-	current_selection_json = json.dumps(product_choice, ensure_ascii=False) if product_choice else "Nenhuma seleção foi feita."
-	current_user_data_json = json.dumps(user_data, ensure_ascii=False) if user_data else "{}"
+        # Validate JSON response
+        try:
+            json.loads(response.text) # Check validity
+            return (response.text, 200, headers)
+        except json.JSONDecodeError:
+            return (json.dumps({"status": "error", "message": "Model returned invalid JSON"}), 500, headers)
 
-	# 2. Construir o prompt em partes para evitar o SyntaxError do f-string
-	
-	# Parte 1: O início do prompt (como f-string para injetar variáveis)
-	prompt_start = f"""
-	Você é um especialista em janelas muito simpático e informal e ajudará o usuário a filtar o produto exato chamado "Re
+    except Exception as e:
+        print(f"Internal Error: {e}", file=sys.stderr)
+        return (json.dumps({"status": "error", "message": str(e)}), 500, headers)
 
+# Local Testing
+if __name__ == "__main__":
+    # Mock Request Class
+    class MockRequest:
+        def __init__(self, data): self.data = data
+        def get_json(self, silent=True): return self.data
+        @property
+        def method(self): return "POST"
 
-	**Regra Absoluta:** Sua resposta DEVE ser um único e válido objeto JSON.
-
-	**Missão Principal (Prioridade 1): Fluxo de Handoff (Coleta de Dados)**
-	Verifique o `CONTEXTO DO USUÁRIO.talkToHuman`.
-	1.  **SE `talkToHuman` for `true`:**
-		- Sua missão é **COLETAR DADOS**. O usuário está em um fluxo para falar com um humano.
-		- Analise o `PROMPT DO USUÁRIO` para extrair `userName`, `userPhone`, ou `userEmail`.
-		- Responda com `target: "user-data"` e o `payload` contendo o dado extraído.
-		- Ex: `payload: {{"userName": "João Silva"}}`
-		- Ex: `payload: {{"userPhone": "555-1234"}}`
-		- *Não* tente configurar produtos (Missão 2) se `talkToHuman` for `true`.
-
-	**Missão Secundária (Prioridade 2): Detecção de Handoff**
-	Verifique o `PROMPT DO USUÁRIO` para gatilhos de handoff.
-	1.  **Gatilhos:** "preço", "quanto custa", "comprar", "negociar", "desconto", "falar com humano", "atendente", "especialista", "pessoa".
-	2.  **SE** um gatilho for detectado E `CONTEXTO DO USUÁRIO.talkToHuman` for `false`:
-		- Sua missão é **INICIAR O HANDOFF**.
-		- Gere uma respondendo à pergunta com informações do banco de conhecimento e já encaminhando para o especialista. (ex: "Claro, aceitamos pix sim. Para esse assunto, é melhor já te conectar com um especialista...").
-		- Responda com `target: "user-data"` e `payload: {{"talkToHuman": true}}`.
-		- *Não* tente configurar produtos (Missão 3) se um gatilho for detectado.
-
-	**Missão Padrão (Prioridade 3): Configuração de Produto**
-	1.  **SE** `talkToHuman` for `false` E NENHUM gatilho de handoff for detectado:
-		- Sua missão é **CONFIGURAR PRODUTO**.
-		- Use a "BASE DE CONHECIMENTO" para responder perguntas. Se a resposta não estiver lá, diga que não sabe.
-		- Extraia características do produto do `PROMPT DO USUÁRIO` (respeitando os "Valores Válidos").
-		- Responda com `target: "product-choice"` e o `payload` contendo as características.
-
-	**Contexto Atual:**
-	- **PROMPT DO USUÁRIO:** "{user_prompt}"
-	- **SELEÇÃO ATUAL (Produto):** {current_selection_json}
-	- **CONTEXTO DO USUÁRIO (Lead):** {current_user_data_json}
-
-	**BASE DE CONHECIMENTO (para Missão 3):**
-	```json
-	"""
-	
-	# Parte 2: O fim do prompt (como string regular, sem 'f', para evitar problemas com chaves '{{}}')
-	prompt_end = """
-	```
-
-	Valores Válidos (para Missão 3 - `product-choice`):
-	Use APENAS os seguintes valores. Se um valor não corresponder, não o inclua.
-	Se o usuário disser "com motor", use "motorizada". Se disser "sem motor", use "manual".
-	```
-	categoria: "janela" | "porta";
-	sistema: "janela-correr" | "porta-correr" | "maxim-ar" | "giro";
-	persiana: "sim" | "nao";
-	persianaMotorizada: "motorizada" | "manual" | null; (só preencha se persiana for "sim")
-	material: "vidro" | "vidro + veneziana" | "lambri" | "veneziana" | "vidro + lambri";
-	folhas: 1 | 2 | 3 | 4 | 6;
-	```
-	
-	Valores Válidos (para Missão 1 - `user-data`):
-	```
-	userName: (string)
-	userPhone: (string)
-	userEmail: (string)
-	talkToHuman: true | false
-	```
-	---
-	**SCHEMA OBRIGATÓRIO PARA A RESPOSTA JSON:**
-	(Sua resposta DEVE seguir este schema)
-
-	```json
-	{
-	  "status": "success",
-	  "message": "(string, sua mensagem amigável em português para o usuário)",
-	  "data": {
-		"target": "(string, 'product-choice' OU 'user-data')",
-		"payload": {
-		  // Preencha este objeto com os valores válidos da missão que você executou.
-		  // Ex (Missão 3): "categoria": "janela"
-		  // Ex (Missão 2): "talkToHuman": true
-		  // Ex (Missão 1): "userName": "João Silva"
-		}
-	  }
-	}
-	```
-	---
-	Agora, processe o pedido e gere o JSON.
-	"""
-
-	# 3. Juntar as partes para formar o prompt final
-	# Isso evita que aspas triplas (ou chaves) no KB_CONTENT quebrem o f-string
-	structured_prompt = prompt_start + KB_CONTENT + prompt_end
-
-	# 4. Chamar a API Gemini
-	try:
-		genai.configure(api_key=API_KEY)
-		model = genai.GenerativeModel(model_name)
-
-		response = model.generate_content(
-			structured_prompt,
-			generation_config={
-				"temperature": 0.0,
-				"response_mime_type": "application/json",
-			},
-			stream=False,
-		)
-
-		try:
-			# Validar se a resposta é um JSON válido antes de retornar
-			json.loads(response.text)
-			return (response.text, 200, headers)
-		except json.JSONDecodeError:
-			raise ValueError(f"Model returned invalid (non-JSON) text: {response.text}")
-
-	except Exception as e:
-		error_payload = {"status": "error", "message": f"An internal error occurred: {str(e)}"}
-		return (json.dumps(error_payload), 500, headers)
+    # Test Case
+    test_payload = {
+        "prompt": "Quero uma janela de correr de vidro",
+        "productChoice": {},
+        "userData": {"talkToHuman": False}
+    }
+    
+    print("--- Running Local Test ---")
+    try:
+        # Ensure API Key is set for local test
+        if "GEMINI_API_KEY" not in os.environ:
+            print("WARNING: GEMINI_API_KEY not set. Skipping actual API call.")
+        else:
+            resp = gemini_endpoint(MockRequest(test_payload))
+            print(f"Status: {resp[1]}")
+            print(f"Body: {resp[0]}")
+    except Exception as e:
+        print(f"Test Failed: {e}")
