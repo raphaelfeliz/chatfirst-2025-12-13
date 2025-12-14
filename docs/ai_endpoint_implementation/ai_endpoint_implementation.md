@@ -50,37 +50,37 @@
 - PURPOSE: Implement the "Brain" logic—loading the Knowledge Base (KB) and constructing the system prompt—without ringing up costs on the real AI API yet.
 - APPROACH: Implement `kb.yaml` loading and the prompt builder function. Mock the AI response to verify the logic flow.
 - SUCCESS: The endpoint returns a simulated response that correctly incorporates data from `kb.yaml` and user input.
-- **STATUS**: [ ] PENDING
+- **STATUS**: [x] PENDING
 
 ## 2.1 CHECKPOINT: KB LOADER
 - PURPOSE: Ensure the app can read and parse the YAML configuration.
 - APPROACH: Create `kb.yaml` and a Python function to read/cache it.
 - SUCCESS: Endpoint can return the raw KB content as debug output.
-- **SUCCESS EVIDENCE**: [ ] Pending
+- **SUCCESS EVIDENCE**: [x] Verified by Agent (KB JSON Preview), [x] Verified by User (Browser Check)
 
 ### 2.1.1 STEP: YAML PARSING
 - PURPOSE: Read the file safely.
 - APPROACH: Implement `load_knowledge_base()` using `yaml.safe_load`.
 - SUCCESS: Logs show loaded data structure.
 #### TASKS:
-- [ ] 2.1.1.1 TASK: Create `kb.yaml` with initial rules.
-- [ ] 2.1.1.2 TASK: Update `main.py` to load this file on startup/request.
-- [ ] 2.1.1.3 TASK: VERIFICATION (Agent): Call endpoint and check if it echoes KB data.
+- [x] 2.1.1.1 TASK: Create `kb.yaml` with initial rules.
+- [x] 2.1.1.2 TASK: Update `main.py` to load this file on startup/request.
+- [x] 2.1.1.3 TASK: VERIFICATION (Agent): Call endpoint and check if it echoes KB data.
 
 ## 2.2 CHECKPOINT: PROMPT BUILDER (MOCKED)
 - PURPOSE: Verify that the system prompt is constructed correctly based on the "3-Priority Mission" architecture.
 - APPROACH: Implement `build_system_prompt()` and wire it into the main handler. Return the *generated prompt* as the response (for inspection) instead of calling the AI.
 - SUCCESS: The response contains the formatted prompt with User Context and KB rules.
-- **SUCCESS EVIDENCE**: [ ] Pending
+- **SUCCESS EVIDENCE**: [x] Verified by Agent (Debug Prompt returned), [x] Verified by User (Curl Output)
 
 ### 2.2.1 STEP: CONTEXT INJECTION
 - PURPOSE: Ensure user data and product choices are inserted into the prompt.
 - APPROACH: Add logic to parse input JSON (`userData`, `productChoice`) and format strings.
 - SUCCESS: Input JSON changes result in different Prompt outputs.
 #### TASKS:
-- [ ] 2.2.1.1 TASK: Implement `build_system_prompt` function.
-- [ ] 2.2.1.2 TASK: Update handler to call this function and return the result.
-- [ ] 2.2.1.3 TASK: VERIFICATION (Agent): Send various JSON payloads (e.g., with/without user data) and verify prompt differences.
+- [x] 2.2.1.1 TASK: Implement `build_system_prompt` function.
+- [x] 2.2.1.2 TASK: Update handler to call this function and return the result.
+- [x] 2.2.1.3 TASK: VERIFICATION (Agent): Send various JSON payloads (e.g., with/without user data) and verify prompt differences.
 
 ---
 
@@ -88,7 +88,7 @@
 - PURPOSE: Connect to the real Google Gemini API.
 - APPROACH: Configure the SDK with the API Key and replace the mock return with the actual `model.generate_content()` call.
 - SUCCESS: The endpoint returns a valid, intelligent JSON response from Gemini.
-- **STATUS**: [ ] PENDING
+- **STATUS**: [x] PENDING
 
 ## 3.1 CHECKPOINT: LIVE CALL
 - PURPOSE: End-to-end integration test.

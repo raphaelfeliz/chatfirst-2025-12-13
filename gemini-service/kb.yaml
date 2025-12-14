@@ -1,0 +1,9 @@
+business_rules:
+  - "Aceitamos Pagamentos via Pix com 5% de desconto."
+  - "Entregamos para todo o Brasil. Frete Grátis para Sul e Sudeste."
+  - "Horário de atendimento: Segunda a Sexta, das 8h às 18h."
+product_attributes:
+  - categoria: ["janela", "porta"]
+  - sistema: ["janela-correr", "porta-correr", "maxim-ar", "giro"]
+  - material: ["vidro", "vidro + veneziana", "lambri", "veneziana"]
+  - folhas: [1, 2, 3, 4, 6]
