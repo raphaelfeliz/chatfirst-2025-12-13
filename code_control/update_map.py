@@ -15,9 +15,10 @@ import json
 import sys
 
 # Configuration
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(CURRENT_DIR) # Go up one level to chat-nov28
 SCRIPTS_DIR = os.path.join(PROJECT_ROOT, 'scripts')
-MAP_FILE = os.path.join(PROJECT_ROOT, 'codebase-map.json')
+MAP_FILE = os.path.join(CURRENT_DIR, 'codebase-map.json')
 JS_MAP_FILE = os.path.join(SCRIPTS_DIR, 'utils', 'codebaseMap.js')
 
 # Regex patterns
@@ -101,8 +102,8 @@ def scan_files():
                         desc = ""
                         manual_categories = []
                         
-                        # Look ahead and behind for comments (extended range for multi-line exports)
-                        search_range = list(range(max(0, idx-3), min(len(lines), idx+15)))
+                        # Look ahead and behind for comments (restricted range to avoid overlap)
+                        search_range = list(range(max(0, idx-3), min(len(lines), idx+5)))
                         for search_idx in search_range:
                             if search_idx != idx:  # Don't search the export line itself
                                 line_content = lines[search_idx]

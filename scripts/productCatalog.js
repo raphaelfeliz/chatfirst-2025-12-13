@@ -2,7 +2,7 @@ export const BASE_PRODUCT_URL = "https://fabricadoaluminio.com.br/produto/";
 // @desc Base URL for product detail pages.
 
 export const PRODUCT_CATALOG = [
-// @desc Array of product objects for the catalog.
+    // @desc The master database of all available products. \n// A flat array of objects, each representing a valid combination of attributes (slug, image, system, material, etc.).
     { "slug": "janelasa/janela-de-correr-2-folhas-com-persiana-integrada-motorizada-30.php", "image": "janela_correr_persiana-sim_motorizada_2folhas.webp", "categoria": "janela", "sistema": "janela-correr", "persiana": "sim", "persianaMotorizada": "motorizada", "material": "vidro", "folhas": 2 },
     { "slug": "janelasa/janela-de-correr-2-folhas-com-persiana-integrada-manual-18.php", "image": "janela_correr_persiana-sim_manual_2folhas.webp", "categoria": "janela", "sistema": "janela-correr", "persiana": "sim", "persianaMotorizada": "manual", "material": "vidro", "folhas": 2 },
     { "slug": "janelasa/janela-de-correr-2-folhas-com-vidro-temperado-6mm-6.php", "image": "janela_correr_persiana-nao_manual_2folhas.webp", "categoria": "janela", "sistema": "janela-correr", "persiana": "nao", "persianaMotorizada": null, "material": "vidro", "folhas": 2 },

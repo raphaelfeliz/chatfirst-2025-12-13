@@ -9,7 +9,7 @@ import { session } from '../data/session.js';
 
 let messageCount = 0;
 
-// @desc Adds a chat message bubble to the chat interface.
+// @desc Appends a message bubble to the chat history. \n// Supports multiple types: 'text', 'product-chips', 'product-image', and 'button'. \n// Handles HTML rendering and styling based on message type.
 export function addChatMessage(text, type, icon = 'fa-comment') {
     logger.log('CHAT', `Adding message (${type}): "${typeof text === 'string' ? text.substring(0, 30) : 'Object'}..."`);
 
@@ -86,7 +86,7 @@ export function addChatMessage(text, type, icon = 'fa-comment') {
     chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
 }
 
-// @desc Handles user message input.
+// @desc Processes text input from the user. \n// Handles special simulation commands (e.g., /sim-contact). \n// Logs messages to storage and triggers a simulated bot response (placeholder).
 function handleUserMessage() {
     const text = chatInput.value.trim();
     if (!text) return;
@@ -95,16 +95,16 @@ function handleUserMessage() {
     if (text === '/sim-contact') {
         chatInput.value = '';
         addChatMessage("Simulating Contact Info Extraction...", 'filter-bot');
-        
+
         const dummyUser = {
             userName: "John Doe",
             userPhone: "5511999998888",
             userEmail: "john@example.com",
             talkToHuman: true
         };
-        
+
         session.saveUserData(dummyUser);
-        
+
         setTimeout(() => {
             addChatMessage("Contact info saved! (Check server console)", 'filter-bot');
         }, 800);
@@ -128,7 +128,7 @@ function handleUserMessage() {
     }, 600);
 }
 
-// @desc Initializes chat input event listeners.
+// @desc Initializes event listeners for the chat input field and send button. \n// Enables input interactions and binds Enter key press.
 export function initChatListeners() {
     if (chatSendBtn && chatInput) {
         chatSendBtn.addEventListener('click', handleUserMessage);
@@ -144,7 +144,7 @@ export function initChatListeners() {
     }
 }
 
-// @desc Renders the chat interface with messages based on selections and engine results.
+// @desc Rebuilds the chat interface based on the entire conversation state. \n// 1. Renders initial greeting. \n// 2. Replays Q&A pairs from facet selections. \n// 3. Displays the final result (chips, image, buttons) or the next pending question.
 export function renderChat(selections, engineResult) {
     chatMessagesEl.innerHTML = ''; // Clear chat to rebuild based on current state
     messageCount = 0; // Reset counter on re-render

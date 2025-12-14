@@ -26,6 +26,7 @@ let currentSelections = {
 
 // --- Handlers ---
 
+// @desc Updates state based on user selection and triggers UI refresh.
 function handleSelection(facet, value) {
     logger.group('FACET', 'Selection Update');
     logger.log('FACET', `User selected: ${facet} = ${value}`);
@@ -39,6 +40,7 @@ function handleSelection(facet, value) {
     logger.groupEnd('FACET');
 }
 
+// @desc Resets selections to a specific point when a breadcrumb is clicked.
 function handleBreadcrumbClick(facet, index) {
     logger.log('UI', `Breadcrumb clicked: ${facet}`);
     const next = { ...currentSelections };
@@ -50,12 +52,14 @@ function handleBreadcrumbClick(facet, index) {
     updateUI();
 }
 
+// @desc Resets the application state to initial defaults.
 function handleRestart() {
     logger.log('APP', 'Restart Triggered');
     currentSelections = { categoria: null, sistema: null, persiana: null, motorizada: null, material: null, folhas: null };
     updateUI();
 }
 
+// @desc Calculates logic state and updates the UI view.
 function updateUI() {
     const engineResult = runFacetLoop(currentSelections);
 
@@ -70,6 +74,7 @@ function updateUI() {
 
 // --- Initialization ---
 
+// @desc Initializes the application, session, and event listeners.
 function init() {
     logger.log('APP', 'App Initialized', APP_INFO);
 

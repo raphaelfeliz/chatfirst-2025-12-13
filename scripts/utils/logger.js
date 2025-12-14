@@ -3,7 +3,7 @@
  * Provides grouped, labeled, and styled console logs with caller identification.
  */
 
-import { CODEBASE_MAP } from './codebaseMap.js';
+import { CODEBASE_MAP } from '../../code_control/codebaseMap.js';
 
 const STYLES = {
     'APP': 'background: #007bff; color: white; padding: 2px 5px; border-radius: 3px; font-weight: bold;',
@@ -157,6 +157,7 @@ class Logger {
      * Standard log with label
      * Supports: log(label, message, data) OR log(message, data) [Auto-label]
      */
+    // @desc Standard logging method. \n    // Supports explicit labeling (e.g., logger.log('UI', 'Msg')) or auto-labeling based on caller. \n    // Logs are grouped, styled, and include caller details.
     log(arg1, arg2, arg3 = null) {
         if (!this.enabled) return;
 
@@ -193,6 +194,7 @@ class Logger {
      * Start a collapsed group
      * Supports: group(label, title) OR group(title) [Auto-label]
      */
+    // @desc Starts a collapsed console group with a label. \n    // Useful for organizing related logs (e.g., during a complex calculation or flow).
     group(arg1, arg2) {
         if (!this.enabled) return;
 
@@ -235,6 +237,7 @@ class Logger {
      * Track variable change
      * Supports: track(label, varName, old, new) OR track(varName, old, new) [Auto-label]
      */
+    // @desc Specialized logger for tracking variable state changes (diffing). \n    // visually compares 'old' and 'new' values with color coding (Red/Green).
     track(arg1, arg2, arg3, arg4) {
         if (!this.enabled) return;
 

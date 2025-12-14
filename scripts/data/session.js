@@ -9,10 +9,7 @@ class SessionController {
     }
 
     /**
-     * Initializes the session.
-     * 1. Checks URL for ?chatId=...
-     * 2. If present, connects to that doc.
-     * 3. If missing, generates a new ID, creates doc, and updates URL.
+     * @desc Initializes the session logic. \n     * 1. Checks URL for existing `chatId`. \n     * 2. If missing, requests a new session from the server (or uses fallback). \n     * 3. Establishes Firestore listener for state synchronization. \n     * 4. Updates URL state and notifies parent frame.
      * @param {Function} onUpdateCallback - Function to call when state changes
      */
     async init(onUpdateCallback) {
@@ -164,4 +161,5 @@ class SessionController {
     }
 }
 
+// @desc Singleton object for managing user session and remote persistence.
 export const session = new SessionController();

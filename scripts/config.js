@@ -1,3 +1,4 @@
+// @desc Configuration details for Firebase services.
 export const firebaseConfig = {
     apiKey: "AIzaSyBQ16p2GKe6oZlV4_bNFRtfXnSKlIju178",
     authDomain: "chat-first-commerce.firebaseapp.com",
@@ -8,4 +9,5 @@ export const firebaseConfig = {
     measurementId: "G-2B3VJMF1FC"
 };
 
+// @desc URL for the Gemini Cloud Function endpoint.
 export const GEMINI_ENDPOINT_URL = "https://gemini-endpoint-yf2trly67a-uc.a.run.app";

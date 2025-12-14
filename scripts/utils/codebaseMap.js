@@ -11,33 +11,31 @@ export const CODEBASE_MAP = {
       "file": "scripts/app.js",
       "type": "constant",
       "signature": "N/A",
-      "description": "Metadata object for the main application orchestrator.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "Variable used to confirm update and mapping in codebase.",
       "categories": [
         "APP"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "TEST_UPDATE_VARIABLE",
       "file": "scripts/app.js",
       "type": "constant",
       "signature": "N/A",
-      "description": "Metadata object for the main application orchestrator.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "Variable used to confirm update and mapping in codebase.",
       "categories": [
         "APP"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "handleBreadcrumbClick",
       "file": "scripts/app.js",
       "type": "function",
       "signature": "(facet, index) => void",
-      "description": "",
+      "description": "Resets selections to a specific point when a breadcrumb is clicked.",
       "categories": [
         "APP"
       ],
@@ -49,7 +47,7 @@ export const CODEBASE_MAP = {
       "file": "scripts/app.js",
       "type": "function",
       "signature": "() => void",
-      "description": "",
+      "description": "Resets the application state to initial defaults.",
       "categories": [
         "APP"
       ],
@@ -61,7 +59,7 @@ export const CODEBASE_MAP = {
       "file": "scripts/app.js",
       "type": "function",
       "signature": "(facet, value) => void",
-      "description": "",
+      "description": "Updates state based on user selection and triggers UI refresh.",
       "categories": [
         "APP"
       ],
@@ -73,7 +71,7 @@ export const CODEBASE_MAP = {
       "file": "scripts/app.js",
       "type": "function",
       "signature": "() => void",
-      "description": "",
+      "description": "Initializes the application, session, and event listeners.",
       "categories": [
         "APP"
       ],
@@ -85,9 +83,33 @@ export const CODEBASE_MAP = {
       "file": "scripts/app.js",
       "type": "function",
       "signature": "() => void",
-      "description": "",
+      "description": "Calculates logic state and updates the UI view.",
       "categories": [
         "APP"
+      ],
+      "dependencies": [],
+      "sideEffects": false
+    },
+    {
+      "name": "GEMINI_ENDPOINT_URL",
+      "file": "scripts/config.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "URL for the Gemini Cloud Function endpoint.",
+      "categories": [
+        "Uncategorized"
+      ],
+      "dependencies": [],
+      "sideEffects": false
+    },
+    {
+      "name": "firebaseConfig",
+      "file": "scripts/config.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "Configuration details for Firebase services.",
+      "categories": [
+        "Uncategorized"
       ],
       "dependencies": [],
       "sideEffects": false
@@ -141,128 +163,157 @@ export const CODEBASE_MAP = {
       "sideEffects": false
     },
     {
+      "name": "session",
+      "file": "scripts/data/session.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "Singleton object for managing user session and remote persistence.",
+      "categories": [
+        "Uncategorized"
+      ],
+      "dependencies": [],
+      "sideEffects": false
+    },
+    {
       "name": "applyFilters",
       "file": "scripts/logic.js",
       "type": "function",
       "signature": "(selections, catalog) => void",
-      "description": "Filters the product catalog based on user selections.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "Filters the product catalog based on current user selections. \\n// It iterates through facets, skipping undefined selections and handling conditional logic (like motorizada dependency). \\n// Uses loose equality to match mixed string/number types.",
       "categories": [
-        "FACET",
-        "LOGIC"
-      ]
+        "LOGIC",
+        "FACET"
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "calculateNextSelections",
       "file": "scripts/logic.js",
       "type": "function",
       "signature": "(current, facet, value) => void",
-      "description": "Calculates the next selection state after a user choice.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "Calculates the next state of selections. \\n// It handles cascading resets (clearing downstream selections when an upstream one changes) \\n// and implements specific business logic dependencies (e.g., if 'persiana' != 'sim', 'motorizada' is null).",
       "categories": [
-        "FACET",
-        "LOGIC"
-      ]
+        "LOGIC",
+        "FACET"
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "getProductField",
       "file": "scripts/logic.js",
       "type": "function",
       "signature": "(product, uiFacet) => void",
-      "description": "Calculates the next selection state after a user choice.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "Calculates the next state of selections. \\n// It handles cascading resets (clearing downstream selections when an upstream one changes) \\n// and implements specific business logic dependencies (e.g., if 'persiana' != 'sim', 'motorizada' is null).",
       "categories": [
-        "FACET",
-        "LOGIC"
-      ]
+        "LOGIC",
+        "FACET"
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "getUniqueOptions",
       "file": "scripts/logic.js",
       "type": "function",
       "signature": "(attribute, products) => void",
-      "description": "Runs the facet selection loop to determine next questions or final products.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "Extracts unique, valid options for a specific attribute from the filtered product list. \\n// Handles numerical sorting for 'folhas' and alphabetical for others.",
       "categories": [
-        "FACET",
-        "LOGIC"
-      ]
+        "LOGIC",
+        "FACET"
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "runFacetLoop",
       "file": "scripts/logic.js",
       "type": "function",
       "signature": "(selections) => void",
-      "description": "Runs the facet selection loop to determine next questions or final products.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "The core decision engine. \\n// Iterates through facets in order to find the next unresolved question. \\n// Handles auto-selection (single option), deadlocks (0 options), and termination (valid product found).",
       "categories": [
-        "FACET",
-        "LOGIC"
-      ]
+        "LOGIC",
+        "FACET"
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "BASE_PRODUCT_URL",
       "file": "scripts/productCatalog.js",
       "type": "constant",
       "signature": "N/A",
-      "description": "Array of product objects for the catalog.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "The master database of all available products. \\n// A flat array of objects, each representing a valid combination of attributes (slug, image, system, material, etc.).",
       "categories": [
         "DATA"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "PRODUCT_CATALOG",
       "file": "scripts/productCatalog.js",
       "type": "constant",
       "signature": "N/A",
-      "description": "Array of product objects for the catalog.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "The master database of all available products. \\n// A flat array of objects, each representing a valid combination of attributes (slug, image, system, material, etc.).",
       "categories": [
         "DATA"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "addChatMessage",
       "file": "scripts/ui/chat.js",
       "type": "function",
       "signature": "(text, type, icon = 'fa-comment') => void",
-      "description": "Adds a chat message bubble to the chat interface.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "Appends a message bubble to the chat history. \\n// Supports multiple types: 'text', 'product-chips', 'product-image', and 'button'. \\n// Handles HTML rendering and styling based on message type.",
       "categories": [
         "UI",
         "CHAT"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
+    },
+    {
+      "name": "handleUserMessage",
+      "file": "scripts/ui/chat.js",
+      "type": "function",
+      "signature": "() => void",
+      "description": "Processes text input from the user. \\n// Handles special simulation commands (e.g., /sim-contact). \\n// Logs messages to storage and triggers a simulated bot response (placeholder).",
+      "categories": [
+        "UI",
+        "CHAT"
+      ],
+      "dependencies": [],
+      "sideEffects": false
+    },
+    {
+      "name": "initChatListeners",
+      "file": "scripts/ui/chat.js",
+      "type": "function",
+      "signature": "() => void",
+      "description": "Initializes event listeners for the chat input field and send button. \\n// Enables input interactions and binds Enter key press.",
+      "categories": [
+        "UI",
+        "CHAT"
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "renderChat",
       "file": "scripts/ui/chat.js",
       "type": "function",
       "signature": "(selections, engineResult) => void",
-      "description": "Renders the chat interface with messages based on selections and engine results.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "Rebuilds the chat interface based on the entire conversation state. \\n// 1. Renders initial greeting. \\n// 2. Replays Q&A pairs from facet selections. \\n// 3. Displays the final result (chips, image, buttons) or the next pending question.",
       "categories": [
         "UI",
         "CHAT"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "createOptionCard",
@@ -270,12 +321,11 @@ export const CODEBASE_MAP = {
       "type": "function",
       "signature": "(facet, value, onSelect, selections = {}) => void",
       "description": "Creates a DOM card element for a facet option with image and click handling.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "createProductCard",
@@ -283,116 +333,131 @@ export const CODEBASE_MAP = {
       "type": "function",
       "signature": "(product) => void",
       "description": "Creates a DOM card element displaying product details with actions.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "getIconForValue",
       "file": "scripts/ui/components.js",
       "type": "function",
       "signature": "(facet, value) => void",
-      "description": "Creates a DOM card element for a facet option with image and click handling.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "Gets the icon for a facet value.",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "breadcrumbEl",
       "file": "scripts/ui/elements.js",
       "type": "constant",
       "signature": "N/A",
-      "description": "DOM element for the chat tab button.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "DOM element for the product results container.",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
+    },
+    {
+      "name": "chatInput",
+      "file": "scripts/ui/elements.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "DOM element for the chat send button.",
+      "categories": [
+        "UI"
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "chatMessagesEl",
       "file": "scripts/ui/elements.js",
       "type": "constant",
       "signature": "N/A",
-      "description": "DOM element for the chat sidebar container.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "DOM element for the wizard tab button.",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
+    },
+    {
+      "name": "chatSendBtn",
+      "file": "scripts/ui/elements.js",
+      "type": "constant",
+      "signature": "N/A",
+      "description": "DOM element for the chat send button.",
+      "categories": [
+        "UI"
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "chatSidebar",
       "file": "scripts/ui/elements.js",
       "type": "constant",
       "signature": "N/A",
-      "description": "DOM element for the chat sidebar container.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "DOM element for the chat input field.",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "gridEl",
       "file": "scripts/ui/elements.js",
       "type": "constant",
       "signature": "N/A",
-      "description": "DOM element for the wizard tab button.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "DOM element for the results display area.",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "productResultsEl",
       "file": "scripts/ui/elements.js",
       "type": "constant",
       "signature": "N/A",
-      "description": "DOM element for the chat sidebar container.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "DOM element for the chat messages container.",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "restartBtn",
       "file": "scripts/ui/elements.js",
       "type": "constant",
       "signature": "N/A",
-      "description": "DOM element for the chat sidebar container.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "DOM element for the chat messages container.",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "resultAreaEl",
       "file": "scripts/ui/elements.js",
       "type": "constant",
       "signature": "N/A",
-      "description": "DOM element for the wizard column container.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "DOM element for the restart button.",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "tabChat",
@@ -400,38 +465,35 @@ export const CODEBASE_MAP = {
       "type": "constant",
       "signature": "N/A",
       "description": "DOM element for the chat sidebar container.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "tabWizard",
       "file": "scripts/ui/elements.js",
       "type": "constant",
       "signature": "N/A",
-      "description": "DOM element for the chat sidebar container.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "DOM element for the wizard column container.",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "titleEl",
       "file": "scripts/ui/elements.js",
       "type": "constant",
       "signature": "N/A",
-      "description": "DOM element for the chat messages container.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
+      "description": "DOM element for the breadcrumb navigation.",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "wizardColumn",
@@ -439,12 +501,11 @@ export const CODEBASE_MAP = {
       "type": "constant",
       "signature": "N/A",
       "description": "DOM element for the chat sidebar container.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "UI_INFO",
@@ -452,12 +513,11 @@ export const CODEBASE_MAP = {
       "type": "constant",
       "signature": "N/A",
       "description": "Metadata object for the UI module.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "renderBreadcrumbs",
@@ -465,12 +525,11 @@ export const CODEBASE_MAP = {
       "type": "function",
       "signature": "(selections, onReset) => void",
       "description": "Renders breadcrumb navigation from current selections.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "switchTab",
@@ -478,12 +537,11 @@ export const CODEBASE_MAP = {
       "type": "function",
       "signature": "(tab) => void",
       "description": "Switches between wizard and chat tabs in mobile view.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "initEventListeners",
@@ -491,12 +549,11 @@ export const CODEBASE_MAP = {
       "type": "function",
       "signature": "(callbacks) => void",
       "description": "Initializes all event listeners for UI interactions.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "updateView",
@@ -504,12 +561,11 @@ export const CODEBASE_MAP = {
       "type": "function",
       "signature": "(selections, engineResult, callbacks) => void",
       "description": "Updates the entire view based on selections and engine results.",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "Uncategorized",
       "categories": [
         "UI"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     },
     {
       "name": "logger",
@@ -517,12 +573,11 @@ export const CODEBASE_MAP = {
       "type": "constant",
       "signature": "N/A",
       "description": "Structured console logger providing grouped, labeled, and styled console logs with caller identification",
-      "dependencies": [],
-      "sideEffects": false,
-      "category": "",
       "categories": [
         "UTILS"
-      ]
+      ],
+      "dependencies": [],
+      "sideEffects": false
     }
   ]
 };
