@@ -390,3 +390,141 @@ Finally, we prepared the ground for the "Chat" features (Phase 4). We implemente
 
 
 
+
+# [14] BACKEND USER DATA ENDPOINT
+## STATUS:
+- DONE
+## reference task:
+- Phase 5 > 5.1 (Step 1 of plan_contact_to_firestore.md)
+## PURPOSE:
+- Validate and safely save user contact information to Firestore.
+## APPROACH:
+- Updated PUT /api/session/:id/user-data in server/index.js.
+- Implemented whitelist validation for userName, userPhone, userEmail, talkToHuman.
+## TASKS:
+- [x] Implement Validation Logic.
+    - trigger: Previous tool call.
+    - condition: Incoming request body has userData.
+    - detail: Filtered fields against allowed list to prevent pollution.
+
+## OUTCOMES:
+- Endpoint now explicitly handles and validates contact fields.
+- Prevents saving arbitrary data to the session document.
+
+## FILES:
+- server/index.js
+
+
+# [15] BACKEND MESSAGES ENDPOINT
+## STATUS:
+- DONE
+## reference task:
+- Phase 5 > 5.1 (Step 2 of plan_contact_to_firestore.md)
+## PURPOSE:
+- Store chat history in a scalable way.
+## APPROACH:
+- Updated POST /api/session/:id/messages in server/index.js.
+- Switched from array field to sub-collection 'messages'.
+- Removed broken FieldValue dependency.
+## TASKS:
+- [x] Refactor Message Storage.
+    - trigger: Previous tool call.
+    - condition: N/A.
+    - detail: db.collection(messages).add({...}).
+
+## OUTCOMES:
+- Messages are now stored as individual documents in a sub-collection.
+- Timestamps are auto-generated if missing.
+
+## FILES:
+- server/index.js
+
+
+# [16] CLIENT DATA LAYER UPDATE
+## STATUS:
+- DONE
+## reference task:
+- Phase 5 > 5.1 (Step 3 of plan_contact_to_firestore.md)
+## PURPOSE:
+- Enable the frontend to send contact info and messages to the new backend endpoints.
+## APPROACH:
+- Added saveUserData and logMessage methods to SessionController in scripts/data/session.js.
+## TASKS:
+- [x] Add saveUserData method.
+    - trigger: Previous tool call.
+    - condition: N/A.
+    - detail: PUT /user-data.
+- [x] Add logMessage method.
+    - trigger: Previous tool call.
+    - condition: N/A.
+    - detail: POST /messages.
+
+## OUTCOMES:
+- Client can now persist all required data types.
+
+## FILES:
+- scripts/data/session.js
+
+
+# [17] FRONTEND SIMULATION TRIGGERS
+## STATUS:
+- DONE
+## reference task:
+- Phase 5 > 5.1 (Step 4 & 5 of plan_contact_to_firestore.md)
+## PURPOSE:
+- Verify data persistence without real AI integration.
+## APPROACH:
+- Modified handleUserMessage in scripts/ui/chat.js.
+- Added listener for /sim-contact to manually trigger saveUserData.
+- Hooked session.logMessage into both user send and bot reply actions.
+## TASKS:
+- [x] Implement /sim-contact.
+    - trigger: Previous tool call.
+    - condition: Input equals /sim-contact.
+    - detail: Sends dummy John Doe data to server.
+- [x] Implement Chat Logging.
+    - trigger: Previous tool call.
+    - condition: Message sent/received.
+    - detail: Calls logMessage API.
+
+## OUTCOMES:
+- Developers can now verify the entire storage pipeline by typing /sim-contact.
+- Every chat message is now automatically backed up to Firestore.
+
+## FILES:
+- scripts/ui/chat.js
+
+
+# [18] LOGGER REFACTOR & VERIFICATION
+## STATUS:
+- DONE
+## reference task:
+- User Request (Bug Fix)
+## PURPOSE:
+- Fix a crash caused by missing warn method in the Logger class.
+- Verify end-to-end data persistence (Session -> Server -> Firestore).
+## APPROACH:
+- Added warn and error methods to scripts/utils/logger.js to match the usage in session.js.
+- Created scripts/check_admin.js to bypass client-side permission issues and directly query Firestore via Admin SDK.
+## TASKS:
+- [x] Patch Logger Class
+    - trigger: TypeError: logger.warn is not a function.
+    - condition: session.js calls logger.warn when Session ID is missing.
+    - detail: Added grouped and styled warn/error implementation.
+- [x] Verify Persistence
+    - trigger: User request to confirm olá and tudo bem were saved.
+    - condition: Access to check_admin.js output.
+    - detail: Script confirmed Session 202512141626_4JQUUD contained valid User Data and 4 formatted messages.
+
+## OUTCOMES:
+- **Crash Resolved:** The app no longer errors on startup when session ID is pending.
+- **Persistence Confirmed:** Verified that the Hybrid Model works:
+    - Client writes to Server -> Server writes to Firestore (Success).
+    - Client reads from Firestore (Pending Security Rules update).
+- **Tooling:** We now have scripts/check_admin.js for god-mode verification of the database.
+
+## FILES:
+- scripts/utils/logger.js
+- scripts/check_admin.js
+- docs/firestore_access/storage_context.md
+

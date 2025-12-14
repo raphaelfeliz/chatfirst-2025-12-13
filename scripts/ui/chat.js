@@ -5,6 +5,7 @@
 import { chatMessagesEl, chatInput, chatSendBtn } from './elements.js';
 import { FACET_DEFINITIONS, FACET_ORDER } from '../constants.js';
 import { logger } from '../utils/logger.js';
+import { session } from '../data/session.js';
 
 let messageCount = 0;
 
@@ -90,14 +91,40 @@ function handleUserMessage() {
     const text = chatInput.value.trim();
     if (!text) return;
 
+    // --- SIMULATION COMMANDS ---
+    if (text === '/sim-contact') {
+        chatInput.value = '';
+        addChatMessage("Simulating Contact Info Extraction...", 'filter-bot');
+        
+        const dummyUser = {
+            userName: "John Doe",
+            userPhone: "5511999998888",
+            userEmail: "john@example.com",
+            talkToHuman: true
+        };
+        
+        session.saveUserData(dummyUser);
+        
+        setTimeout(() => {
+            addChatMessage("Contact info saved! (Check server console)", 'filter-bot');
+        }, 800);
+        return;
+    }
+    // ---------------------------
+
     // 1. Add User Message
     addChatMessage(text, 'user');
     chatInput.value = '';
 
-    // 2. Simulate Bot Response (Placeholder for now)
+    // 2. Log User Message to Firestore
+    session.logMessage('user', text);
+
+    // 3. Simulate Bot Response (Placeholder for now)
     // In future, this is where we'd call the Gemini API
     setTimeout(() => {
-        addChatMessage("Ainda estou aprendendo a conversar livremente! Por enquanto, por favor use os filtros ao lado para encontrar seu produto.", 'gemini-bot');
+        const botText = "Ainda estou aprendendo a conversar livremente! Por enquanto, por favor use os filtros ao lado para encontrar seu produto.";
+        addChatMessage(botText, 'gemini-bot');
+        session.logMessage('assistant', botText);
     }, 600);
 }
 

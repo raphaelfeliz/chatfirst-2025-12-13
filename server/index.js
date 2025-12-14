@@ -109,12 +109,25 @@ app.put('/api/session/:id/user-data', async (req, res) => {
     const { id } = req.params;
     const { userData } = req.body;
 
+    if (!userData) {
+        return res.status(400).json({ error: 'Missing userData' });
+    }
+
+    // Whitelist allowed fields
+    const allowedFields = ['userName', 'userPhone', 'userEmail', 'talkToHuman'];
+    const safeData = {};
+    allowedFields.forEach(field => {
+        if (userData[field] !== undefined) {
+            safeData[field] = userData[field];
+        }
+    });
+
     try {
         await db.collection('chatlist').doc(id).update({
-            userData: userData,
+            "user-data": safeData,
             updatedAt: new Date().toISOString()
         });
-        console.log(`[USER-DATA] Updated session ${id} with:`, userData);
+        console.log(`[USER-DATA] Updated session ${id} with:`, safeData);
         res.json({ success: true });
     } catch (e) {
         console.error(`[USER-DATA] Error updating session ${id}:`, e);
@@ -127,20 +140,27 @@ app.post('/api/session/:id/messages', async (req, res) => {
     const { id } = req.params;
     const { message } = req.body;
 
-    if (!message || !message.text) {
-        return res.status(400).json({ error: 'Invalid message format' });
+    if (!message || !message.content || !message.role) {
+        return res.status(400).json({ error: 'Invalid message format. Requires content and role.' });
     }
 
     try {
         const docRef = db.collection('chatlist').doc(id);
+        
+        // Add to sub-collection
+        await docRef.collection('messages').add({
+            role: message.role,
+            content: message.content,
+            timestamp: message.timestamp || new Date().toISOString()
+        });
 
+        // Optionally update the main doc with last message metadata for easy listing
         await docRef.update({
-            messages: FieldValue.arrayUnion(message),
-            lastMessage: message.text,
+            lastMessage: message.content,
             lastMessageAt: new Date().toISOString()
         });
 
-        console.log(`[MSG] Saved message for ${id}: ${message.text.substring(0, 20)}...`);
+        console.log(`[MSG] Saved message for ${id}: ${message.content.substring(0, 20)}...`);
         res.json({ success: true });
     } catch (e) {
         console.error(`[MSG] Error saving message for ${id}:`, e);

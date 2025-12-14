@@ -1,0 +1,43 @@
+[dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  override existing env vars with { override: true }
+Loading credentials from: C:\dev\chat-nov28\.secrets\chat-first-commerce-firebase-adminsdk-fbsvc-a547adac69.json
+Firebase initialized. Querying Firestore...
+Found 5 recent documents:
+
+--- Session ID: 202512141626_4JQUUD ---
+Created At: 2025-12-14T16:26:33.639Z
+Status: active
+Product Choice: {"categoria":null,"sistema":null,"persiana":null,"motorizada":null,"material":null,"folhas":null}
+User Data: {"userName":"John Doe","userPhone":"5511999998888","userEmail":"john@example.com","talkToHuman":true}
+Message Count: 4
+  [user] 2025-12-14T16:26:42.665Z: olá...
+  [assistant] 2025-12-14T16:26:43.282Z: Ainda estou aprendendo a conversar livremente! Por...
+  [user] 2025-12-14T16:26:45.913Z: tudo bem?...
+  [assistant] 2025-12-14T16:26:46.535Z: Ainda estou aprendendo a conversar livremente! Por...
+
+--- Session ID: 202512141615_OGEXWB ---
+Created At: 2025-12-14T16:15:23.742Z
+Status: active
+Product Choice: {"categoria":null,"sistema":null,"persiana":null,"motorizada":null,"material":null,"folhas":null}
+User Data: {"userName":"John Doe","userPhone":"5511999998888","userEmail":"john@example.com","talkToHuman":true}
+Message Count: 0
+
+--- Session ID: 202512140453_24LKY7 ---
+Created At: 2025-12-14T04:53:57.402Z
+Status: active
+Product Choice: {"categoria":"janela","sistema":"janela-correr","persiana":"sim","motorizada":"motorizada","material":null,"folhas":null}
+User Data: {}
+Message Count: 0
+
+--- Session ID: 202512140440_8GFKBA ---
+Created At: 2025-12-14T04:40:55.949Z
+Status: undefined
+Product Choice: {}
+User Data: {"talkToHuman":false}
+Message Count: 0
+
+--- Session ID: 202512140438_HVB1Q9 ---
+Created At: 2025-12-14T04:38:48.545Z
+Status: undefined
+Product Choice: {}
+User Data: {"talkToHuman":false}
+Message Count: 0

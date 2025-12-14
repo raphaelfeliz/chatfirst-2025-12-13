@@ -115,6 +115,53 @@ class SessionController {
             logger.error('SESSION', 'Failed to save selection', e);
         }
     }
+
+    /**
+     * Persist user contact data to the server.
+     * @param {Object} userData - The { userName, userPhone, ... } object.
+     */
+    async saveUserData(userData) {
+        if (!this.chatId) return;
+
+        logger.log('SESSION', 'Saving User Data...', userData);
+        try {
+            await fetch(`http://localhost:3000/api/session/${this.chatId}/user-data`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userData })
+            });
+            logger.log('SESSION', 'User Data Saved');
+        } catch (e) {
+            logger.error('SESSION', 'Failed to save user data', e);
+        }
+    }
+
+    /**
+     * Log a message to the server transcript.
+     * @param {string} role - 'user' or 'assistant'.
+     * @param {string} content - The text message.
+     */
+    async logMessage(role, content) {
+        if (!this.chatId) return;
+
+        // Optimistic local log? Not needed, UI handles display. This is just for storage.
+        try {
+            await fetch(`http://localhost:3000/api/session/${this.chatId}/messages`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: {
+                        role,
+                        content,
+                        timestamp: new Date().toISOString()
+                    }
+                })
+            });
+            // Quiet success - don't spam logs for every msg
+        } catch (e) {
+            logger.error('SESSION', 'Failed to log message', e);
+        }
+    }
 }
 
 export const session = new SessionController();

@@ -267,6 +267,77 @@ class Logger {
 
         console.groupEnd();
     }
+    /**
+     * Log a warning
+     */
+    warn(arg1, arg2, arg3) {
+        if (!this.enabled) return;
+
+        let label = 'DEFAULT';
+        let message = '';
+        let data = null;
+
+        if (STYLES[arg1] || (this.enabledLabels.has(arg1))) {
+            label = arg1;
+            message = arg2;
+            data = arg3;
+        } else {
+            const caller = this._getCaller();
+            const info = this._getCallerInfo(caller);
+            label = (info && info.categories && info.categories.length > 0) ? info.categories[0] : 'DEFAULT';
+            message = arg1;
+            data = arg2;
+        }
+
+        if (!this.enabledLabels.has(label)) return;
+
+        const style = 'background: #ffc107; color: black; padding: 2px 5px; border-radius: 3px; font-weight: bold;';
+        console.groupCollapsed(`%c⚠️ [${label}] WARN: ${message}`, style);
+
+        const caller = this._getCaller();
+        this._logCallerDetails(caller);
+
+        if (data) this._logObject('Data', data, '#ffc107');
+        console.groupEnd();
+    }
+
+    /**
+     * Log an error
+     */
+    error(arg1, arg2, arg3) {
+        if (!this.enabled) return;
+
+        let label = 'DEFAULT';
+        let message = '';
+        let data = null;
+
+        if (STYLES[arg1] || (this.enabledLabels.has(arg1))) {
+            label = arg1;
+            message = arg2;
+            data = arg3;
+        } else {
+            const caller = this._getCaller();
+            const info = this._getCallerInfo(caller);
+            label = (info && info.categories && info.categories.length > 0) ? info.categories[0] : 'DEFAULT';
+            message = arg1;
+            data = arg2;
+        }
+
+        const style = 'background: #dc3545; color: white; padding: 2px 5px; border-radius: 3px; font-weight: bold;';
+        // Check if message is Error object
+        if (message instanceof Error) {
+            message = message.message;
+            if (!data) data = arg1; // assign error obj to data if not separate
+        }
+
+        console.groupCollapsed(`%c❌ [${label}] ERROR: ${message}`, style);
+
+        const caller = this._getCaller();
+        this._logCallerDetails(caller);
+
+        if (data) this._logObject('Error Details', data, '#dc3545');
+        console.groupEnd();
+    }
 }
 
 // @desc Structured console logger providing grouped, labeled, and styled console logs with caller identification
