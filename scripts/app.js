@@ -63,6 +63,9 @@ function updateUI() {
         onOptionSelect: handleSelection,
         onBreadcrumbClick: handleBreadcrumbClick
     });
+
+    // Validated Checkpoint 3.2: Persist state to server
+    session.updateSelection(currentSelections);
 }
 
 // --- Initialization ---

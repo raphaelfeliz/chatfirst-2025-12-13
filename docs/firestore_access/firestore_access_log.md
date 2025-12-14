@@ -287,8 +287,100 @@ use this template:
 ## NOTES:
 - Local port management is key for testing. In production, this will be a fixed domain (e.g. `app.chatfirst.com`).
 
-## LEARNINGS:
-- N/A
+
+# [11] FACET PERSISTENCE API
+## STATUS:
+- DONE
+## reference task:
+- Phase 3 > 3.1
+## PURPOSE:
+- Allow the client to save user selections (facets) to the database.
+## APPROACH:
+- Added `PUT /api/session/:id/product-choice` to `server/index.js`.
+- Updates `chatlist` collection, specific document, field `product-choice`.
+## TASKS:
+- [x] Implement PUT endpoint.
+    - trigger: User request.
+    - condition: `id` and `selection` in body.
+    - detail: `docRef.update({ "product-choice": selection })`.
+
+## OUTCOMES:
+- Server accepts updates.
+- Firestore document updates in real-time.
+
+## FILES:
+- `server/index.js`
+- `docs/firestore_access/firestore_access_log.md`
+
+## NOTES:
+- Requires existing session ID to work (returns 404 if missing).
+
+
+# [12] CLIENT FACET PERSISTENCE
+## STATUS:
+- DONE
+## reference task:
+- Phase 3 > 3.2
+## PURPOSE:
+- Automatically save user choices to the server as they interact with the UI.
+## APPROACH:
+- Added `updateSelection()` to `SessionController` (wrapper for fetch PUT).
+- Updated `updateUI()` in `scripts/app.js` to call `session.updateSelection()`.
+## TASKS:
+- [x] Add `updateSelection` to `session.js`.
+    - trigger: `updateUI` call.
+    - condition: `this.chatId` exists.
+    - detail: `fetch(PUT, /api/session/:id/product-choice)`.
+- [x] Call on every update.
+    - trigger: `handleSelection`, `handleBreadcrumb`, `handleRestart`.
+    - condition: N/A.
+    - detail: Placed inside `updateUI` to catch all state changes centraly.
+
+## OUTCOMES:
+- Clicking "Janela" now triggers a network request.
+- Console logs: `[SESSION] Selection Saved to Server`.
+
+## FILES:
+- `scripts/data/session.js`
+- `scripts/app.js`
+- `docs/firestore_access/firestore_access_log.md`
+
+## NOTES:
+- This is "Fire and Forget" (we don't wait for the save to finish before updating UI). This makes the UI snappy.
+
+
+# [13] FACET PERSISTENCE DEBUGGING
+
+# [13] FACET PERSISTENCE DEBUGGING
+## STATUS:
+- DONE (Verification Success)
+## reference task:
+- Phase 3 > 3.2 (Verification)
+## PURPOSES:
+- Confirm data saving works.
+## OUTCOME:
+- User verified that navigating to `http://localhost:5501` and clicking options saves data to Firestore.
+- Confirmed that refreshing with ID persists state, and removing ID starts new session.
+
+## FILES:
+- `scripts/data/session.js`
+
+
+## SESSION SUMMARY (2025-12-14)
+
+Today's session focused on transitioning the "Cosmic Aluminum Configurator" from an ephemeral client-side app to a persistent, Firestore-backed application. We began by establishing a secure Node.js backend (`server/index.js`) configured with Firebase Admin SDK credentials. This server acts as the secure intermediary for database operations, implementing a health check endpoint and solving initial connectivity challenges including Firestore security rules.
+
+With the backend in place, we implemented a robust Session Management system. This involved creating a `POST /api/session/start` endpoint that generates custom, sortable session IDs (e.g., `20251214...`). We refactored the client's `session.js` to fetch these IDs upon initialization and update the browser's URL history, ensuring that users can refresh the page without losing their session context.
+
+A significant portion of the work was dedicated to creating a standalone "Widget SDK". We spun off a separate repository (`chatfirst-widget`) containing `embed.js` and a mock host page. This SDK implements a "Check-Connect-Save" handshake mechanism, using `postMessage` and `localStorage` to preserve session identity across page reloads and iframes, proving the app can be reliably embedded in third-party sites like Wix or WordPress.
+
+Following the infrastructure setup, we successfully implemented "Facet Persistence" (Phase 3). We created a `PUT` endpoint to handle product choices and wired the client's `updateUI` function to automatically save every user selection (e.g., "Janela", "Suprema") to Firestore in real-time. Verification confirmed that these choices are reliably stored and associated with the correct session document.
+
+Finally, we prepared the ground for the "Chat" features (Phase 4). We implemented server endpoints for saving User Data (`PUT`) and Chat Messages (`POST`), ensuring the backend is ready to store conversation history and contact details. We also documented a clear strategy for simulating AI responses during development and explicitly defined cleanup rules for the eventual integration of the real Gemini AI service.
+
+
+
+
 
 
 

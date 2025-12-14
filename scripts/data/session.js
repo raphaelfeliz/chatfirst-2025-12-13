@@ -91,6 +91,30 @@ class SessionController {
     _generateId() {
         return 'sess_' + Math.random().toString(36).substr(2, 9);
     }
+
+    /**
+     * Persist facet selections to the server.
+     * @param {Object} selection - The currentSelections object.
+     */
+    async updateSelection(selection) {
+        if (!this.chatId) {
+            logger.warn('SESSION', 'Cannot save selection: No Chat ID');
+            return;
+        }
+
+        logger.log('SESSION', 'Attemping to Save Selection to Server...', { id: this.chatId, selection });
+
+        try {
+            await fetch(`http://localhost:3000/api/session/${this.chatId}/product-choice`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ selection })
+            });
+            logger.log('SESSION', 'Selection Saved to Server', selection);
+        } catch (e) {
+            logger.error('SESSION', 'Failed to save selection', e);
+        }
+    }
 }
 
 export const session = new SessionController();
