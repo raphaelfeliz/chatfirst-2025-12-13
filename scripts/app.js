@@ -7,6 +7,7 @@ import { FACET_ORDER } from './constants.js';
 import { calculateNextSelections, runFacetLoop } from './logic.js';
 import * as UI from './ui/index.js';
 import { logger } from './utils/logger.js';
+import { session } from './data/session.js';
 
 export const TEST_UPDATE_VARIABLE = "I should appear in the map";
 // @desc Variable used to confirm update and mapping in codebase.
@@ -68,6 +69,13 @@ function updateUI() {
 
 function init() {
     logger.log('APP', 'App Initialized', APP_INFO);
+
+    // Initialize Session
+    session.init((remoteData) => {
+        // Optional: Rehydrate state from remote if needed
+        logger.log('APP', 'Remote State Received', remoteData);
+    });
+
     UI.initEventListeners({
         onRestart: handleRestart
     });

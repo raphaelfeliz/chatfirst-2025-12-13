@@ -23,9 +23,25 @@ class SessionController {
         let isNewSession = false;
 
         if (!id) {
-            id = this._generateId();
-            isNewSession = true;
-            logger.log('SESSION', 'Generated New ID', id);
+            // New Session: Fetch from Server
+            try {
+                const response = await fetch('http://localhost:3000/api/session/start', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.sessionId) {
+                    id = data.sessionId;
+                    isNewSession = true;
+                    logger.log('SESSION', 'Created New Server Session', { id, debugId: data.debugId });
+
+                    // BROADCAST TO HOST (Handshake)
+                    window.parent.postMessage({ type: 'SESSION_STARTED', chatId: id }, '*');
+                } else {
+                    throw new Error('No sessionId returned from server');
+                }
+            } catch (e) {
+                logger.error('SESSION', 'Failed to create server session. Falling back to offline mode.', e);
+                id = this._generateId(); // Fallback
+            }
         } else {
             logger.log('SESSION', 'Found Existing ID', id);
         }
@@ -33,23 +49,12 @@ class SessionController {
         this.chatId = id;
         this._updateUrl(id);
 
-        const chatDocRef = doc(db, "chats", this.chatId);
+        // Connect to 'chatlist' (Updated from 'chats')
+        const chatDocRef = doc(db, "chatlist", this.chatId);
 
-        // Ensure document exists
-        if (isNewSession) {
-            try {
-                // Initialize with empty state
-                const initialState = {
-                    createdAt: new Date().toISOString(),
-                    "product-choice": {},
-                    "user-data": { talkToHuman: false }
-                };
-                await setDoc(chatDocRef, initialState);
-                logger.log('SESSION', 'Created New Document', initialState);
-            } catch (e) {
-                logger.log('SESSION', 'Creation Failed', e);
-            }
-        }
+        // No need to create doc here; the server did it.
+        // If we fell back to offline generation, we might want to let the first write create it, 
+        // or re-implement local creation if strictly needed. For now, assuming server succeeds.
 
         // Subscribe to changes
         this.unsubscribe = onSnapshot(chatDocRef, (docSnap) => {

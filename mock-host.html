@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Host Site</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1a73e8;
+        }
+
+        .controls {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f0fe;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #d93025;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #b02018;
+        }
+
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Welcome to Customer Site</h1>
+        <p>This is a fake landing page representing a customer's website.</p>
+        <p>The Chat Widget should appear in the bottom right corner.</p>
+
+        <div class="controls">
+            <h3>Debug Controls</h3>
+            <p><strong>Stored Session ID:</strong> <span id="stored-id">None</span></p>
+            <button onclick="clearSession()">Clear Local Storage & Reload</button>
+        </div>
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
+            magna aliqua.</p>
+    </div>
+
+    <!-- WIDGET SCRIPT -->
+    <script src="./scripts/widget/embed.js"></script>
+
+    <!-- Debug Logic for Host Page -->
+    <script>
+        function updateDisplay() {
+            const id = localStorage.getItem('chatfirst_session_id');
+            document.getElementById('stored-id').textContent = id ? id : 'None (New Session will be created)';
+        }
+
+        function clearSession() {
+            localStorage.removeItem('chatfirst_session_id');
+            location.reload();
+        }
+
+        // Listen for updates to update our debug display in real-time
+        window.addEventListener('storage', updateDisplay); // Cross-tab
+        setInterval(updateDisplay, 1000); // Polling for same-tab updates
+
+        updateDisplay();
+    </script>
+
+</body>
+
+</html>
